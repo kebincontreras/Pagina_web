@@ -1,0 +1,82 @@
+{{/* Resume Skills Section - reads from content/authors/admin/skills.md or falls back to home/skills.md */}}
+{{ $ := .root }}
+{{ $page := .page }}
+
+{{/* Try to get skills from authors/admin folder first, then fall back to home/skills */}}
+{{ $skills_page := site.GetPage "/authors/admin/skills" }}
+{{ if not $skills_page }}
+  {{ $skills_page = site.GetPage "/home/skills" }}
+{{ end }}
+
+{{/* Programming Languages Section - reads from content/authors/admin/skills_program.md */}}
+{{ $skills_program_page := site.GetPage "/authors/admin/skills_program" }}
+
+{{ with $skills_page }}
+<section id="resume-skills" class="mt-5 pt-4">
+  <div class="row featurette">
+    {{ with .Title }}
+    <div class="col-12 section-heading">
+      <h1>{{ . | markdownify | emojify }}</h1>
+      {{ if $.Params.subtitle }}<p>{{ $.Params.subtitle | markdownify | emojify }}</p>{{ end }}
+    </div>
+    {{ end }}
+
+    {{ with .Content }}
+    <div class="col-12">
+      {{ . | markdownify }}
+    </div>
+    {{ end }}
+
+    {{ range .Params.feature }}
+    {{ $pack := or .icon_pack "fas" }}
+    {{ $pack_prefix := $pack }}
+    {{ if in (slice "fab" "fas" "far" "fal") $pack }}
+    {{ $pack_prefix = "fa" }}
+    {{ end }}
+    <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+      <div class="position-relative py-2 shadow featurette-margin">
+  {{ if .parcent }}<div class="progress-bar" style="width:{{ .parcent }}"></div>{{ else }}<div class="progress-bar" style="width:0%"></div>{{ end }}
+        {{ with .icon }}<div class="featurette-icon"><i class="{{ $pack }} {{ $pack_prefix }}-{{ . }}"></i></div>{{ end }}
+        <h3>{{ .name | markdownify | emojify }}</h3>
+        {{ with .parcent }}<p>{{ . }}</p>{{ end }}
+      </div>
+    </div>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
+
+{{ if $skills_program_page }}
+<section id="resume-skills-program" class="mt-5 pt-4">
+  <div class="row featurette">
+    {{ with $skills_program_page.Title }}
+    <div class="col-12 section-heading">
+      <h1>{{ . | markdownify | emojify }}</h1>
+      {{ if $skills_program_page.Params.subtitle }}<p>{{ $skills_program_page.Params.subtitle | markdownify | emojify }}</p>{{ end }}
+    </div>
+    {{ end }}
+
+    {{ with $skills_program_page.Content }}
+    <div class="col-12">
+      {{ . | markdownify }}
+    </div>
+    {{ end }}
+
+    {{ range $skills_program_page.Params.feature }}
+    {{ $pack := or .icon_pack "fas" }}
+    {{ $pack_prefix := $pack }}
+    {{ if in (slice "fab" "fas" "far" "fal") $pack }}
+    {{ $pack_prefix = "fa" }}
+    {{ end }}
+    <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+      <div class="position-relative py-2 shadow featurette-margin">
+        {{ if .parcent }}<div class="progress-bar" style="width:{{ .parcent }}"></div>{{ else }}<div class="progress-bar" style="width:0%"></div>{{ end }}
+        {{ with .icon }}<div class="featurette-icon"><i class="{{ $pack }} {{ $pack_prefix }}-{{ . }}"></i></div>{{ end }}
+        <h3>{{ .name | markdownify | emojify }}</h3>
+        {{ with .parcent }}<p>{{ . }}</p>{{ end }}
+      </div>
+    </div>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
