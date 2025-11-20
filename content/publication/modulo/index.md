@@ -4,7 +4,7 @@ authors:
   - Kebin Contreras
   - Brayan Monroy
   - Jorge Bacca
-date: "2025-05-12T00:00:00Z"
+date: "2025-11-19T00:00:00Z"
 doi: "10.1007/978-3-031-91767-7_12"
 
 # Schedule page publish date (NOT publication's date).

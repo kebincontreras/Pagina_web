@@ -5,7 +5,7 @@ authors:
   - Juan Espinosa
   - Kebin Contreras
   - Jorge Bacca
-date: "2025-08-27T00:00:00Z"
+date: "2025-11-18T00:00:00Z"
 doi: "10.1109/STSIVA66383.2025.11156348"
 
 # Schedule page publish date (NOT publication's date).

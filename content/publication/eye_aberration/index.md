@@ -3,11 +3,11 @@ title: "Computational Correction of Eye Aberrations: A Physical Modeling Approac
 authors:
   - Kebin Contreras
   - Jorge Bacca
-date: "2025-08-27T00:00:00Z"
+date: "2025-11-20T00:00:00Z"
 doi: "10.1109/STSIVA66383.2025.11156245"
 
 # Schedule page publish date (NOT publication's date).
-publishDate: "2025-09-17T00:00:00Z"
+publishDate: "2025-11-20T00:00:00Z"
 
 # Publication type.
 # Legend: 0 = Uncategorized; 1 = Conference paper; 2 = Journal article;
