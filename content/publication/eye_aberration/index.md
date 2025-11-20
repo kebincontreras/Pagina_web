@@ -9,6 +9,8 @@ doi: "10.1109/STSIVA66383.2025.11156245"
 # Schedule page publish date (NOT publication's date).
 publishDate: "2025-11-20T00:00:00Z"
 
+weight: 1
+
 # Publication type.
 # Legend: 0 = Uncategorized; 1 = Conference paper; 2 = Journal article;
 # 3 = Preprint / Working Paper; 4 = Report; 5 = Book; 6 = Book section;
