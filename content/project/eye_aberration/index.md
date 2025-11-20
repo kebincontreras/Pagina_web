@@ -6,6 +6,8 @@ tags:
   - Deep Learning
   - Visual Perception
 date: "2025-08-27T00:00:00Z"
+
+weight: 1
 publication_link: "/publication/eye_aberration/"
 authors:
   - Kebin Contreras

@@ -6,6 +6,8 @@ tags:
   - Deep Learning
   - Computer Vision
 date: "2025-08-27T00:00:00Z"
+
+weight: 3
 publication_link: "/publication/cocoa_fermentation/"
 authors:
   - Juan Suarez
