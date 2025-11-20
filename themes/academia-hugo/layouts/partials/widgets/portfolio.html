@@ -68,11 +68,8 @@
         {{/* Sort by weight if provided, otherwise fallback to date desc */}}
         {{ $pages := where site.RegularPages "Type" $items_type }}
         {{/* Split into pages with weight and without weight, list weighted first */}}
-        {{ $weighted := where $pages ".Params.weight" "ne" nil }}
-        {{ $unweighted := where $pages ".Params.weight" "==" nil }}
-        {{ $weighted = sort $weighted ".Params.weight" "asc" }}
-        {{ $unweighted = sort $unweighted ".Date" "desc" }}
-        {{ $pages = append $weighted $unweighted }}
+          {{/* Always sort by weight ascending when available; pages without weight will be last */}}
+          {{ $pages = sort $pages ".Params.weight" "asc" }}
         {{ range $idx, $item := $pages }}
         {{ $link := $item.RelPermalink }}
         {{ $target := "" }}
