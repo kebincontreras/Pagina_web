@@ -490,7 +490,16 @@
           masonry: {
             gutter: 20
           },
-          filter: $section.find('.default-project-filter').text()
+          filter: $section.find('.default-project-filter').text(),
+          // Sort by data-weight attribute (numeric). Items without weight default to 9999.
+          getSortData: {
+            weight: function(itemElem) {
+              var w = $(itemElem).attr('data-weight');
+              return w ? parseInt(w, 10) : 9999;
+            }
+          },
+          sortBy: 'weight',
+          sortAscending: true
         });
 
         // Filter items when filter link is clicked.

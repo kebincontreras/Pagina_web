@@ -7,8 +7,9 @@
 
 {{ $resource := ($item.Resources.ByType "image").GetMatch "*featured*" }}
 {{ $js_tag_classes := delimit (apply (apply $item.Params.tags "replace" "." " " "-") "printf" "js-id-%s" ".") " " }}
+{{ $w := cond (isset $item.Params "weight") $item.Params.weight 9999 }}
 
-<div class="project-card project-item isotope-item w-100 {{ $js_tag_classes | safeHTMLAttr }}" style="background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-radius: 8px; margin-bottom: 2rem; font-size:0.95rem;">
+<div class="project-card project-item isotope-item w-100 {{ $js_tag_classes | safeHTMLAttr }}" data-weight="{{ $w }}" style="background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-radius: 8px; margin-bottom: 2rem; font-size:0.95rem;">
   <div class="d-flex align-items-center" style="min-height:180px;">
     <div class="flex-grow-1 p-4">
       <h3 class="mb-2" style="font-weight:700; font-size:1.15rem;"><a href="{{ $link }}" {{ $target | safeHTMLAttr }}>{{ $item.Title | markdownify | emojify }}</a></h3>
