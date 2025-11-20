@@ -67,13 +67,12 @@
       <div class="{{ if or $st.Params.content.filter_button (eq $st.Params.design.view 3) }}isotope projects-container{{end}} {{if eq $st.Params.design.view 3}}js-layout-masonry{{else}}row js-layout-row{{end}} {{ if eq $st.Params.design.view 5 }}project-showcase mt-5{{end}}">
         {{/* Sort by weight if provided, otherwise fallback to date desc */}}
         {{ $pages := where site.RegularPages "Type" $items_type }}
-        {{ $hasWeight := false }}
-        {{ range $p := $pages }}{{ if $p.Params.weight }}{{ $hasWeight = true }}{{ end }}{{ end }}
-        {{ if $hasWeight }}
-          {{ $pages = sort $pages ".Params.weight" "asc" }}
-        {{ else }}
-          {{ $pages = sort $pages ".Date" "desc" }}
-        {{ end }}
+        {{/* Split into pages with weight and without weight, list weighted first */}}
+        {{ $weighted := where $pages ".Params.weight" "ne" nil }}
+        {{ $unweighted := where $pages ".Params.weight" "==" nil }}
+        {{ $weighted = sort $weighted ".Params.weight" "asc" }}
+        {{ $unweighted = sort $unweighted ".Date" "desc" }}
+        {{ $pages = append $weighted $unweighted }}
         {{ range $idx, $item := $pages }}
         {{ $link := $item.RelPermalink }}
         {{ $target := "" }}
