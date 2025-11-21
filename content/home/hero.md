@@ -8,7 +8,8 @@ weight = 10  # Order that this section will appear.
 title = "Academia"
 
 # Hero image (optional). Enter filename of an image in the `static/img/` folder.
-hero_media = "kebin2.jpeg"
+# Add a query string to bust CDN/cache when updating the image.
+hero_media = "kebin2.jpeg?v=2"
 
 [design.background]
   # Apply a background color, gradient, or image.
