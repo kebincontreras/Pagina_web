@@ -133,7 +133,28 @@ COVID-19."""
   location = "Industrial University of Santander, Colombia"
   date_start = "2023"
   date_end = ""
-  description = """Co-director of the degree final project entitled “Classification of the fermentation level of dried cocoabeans through spectral image processing and deep learning”. Currently under research.
+  description = """Co-director of the degree final project entitled "Classification of the fermentation level of dried cocoabeans through spectral image processing and deep learning". Currently under research.
   """
+
+[[experience]]
+  title = "Intern - Defensive Strategies against Adversarial Attacks"
+  company = "King Abdullah University of Science and Technology (KAUST)"
+  company_url = ""
+  location = "Saudi Arabia"
+  date_start = "2025"
+  date_end = ""
+  description = """Research internship on developing defensive strategies against adversarial attacks in multimodal agents.
+
+  Responsibilities include:
+
+  * Characterization of different types of adversarial perturbations including localized patches with spatial constraints, globally distributed subtle perturbations, semantically coherent attacks, and transferable perturbations across architectures.
+  * Implementation of the Projected Displacement (PD) model to construct abstract security spaces around inputs, leveraging anisotropy and locality properties of adversarial perturbations.
+  * Development of detection techniques based on adversarial perturbation properties, pre-processing filters for input purification, and defensive ensemble approaches.
+  * Systematic experimental evaluation and comparative analysis of proposed defense strategies against malicious image patch attacks.
+
+<br/>
+
+**Research Focus:** Mitigating vulnerabilities of vision-language multimodal agents against adversarial attacks with malicious image patches (MIPs) that exploit weaknesses in visual processing. Expected to develop an adaptable defense framework and security metrics for evaluating multimodal systems.
+"""
 
 +++
