@@ -18,10 +18,10 @@
     {{ if eq $page.Params.email_form 1 }}
     {{ $post_action = "netlify" }}
     {{ else }}
-    {{ if not site.Params.formspree_id }}
-    {{ errorf "Please set a Formspree form ID using the `formspree_id` parameter in `config.toml`. Otherwise, set `email_form = 0` to disable the contact form." }}
+    {{ if not site.Params.basin_id }}
+    {{ errorf "Please set a Basin form ID using the `basin_id` parameter in `config.toml`. Otherwise, set `email_form = 0` to disable the contact form." }}
     {{ end }}
-    {{ $post_action = printf "action=\"https://formspree.io/f/%s\"" site.Params.formspree_id }}
+    {{ $post_action = printf "action=\"https://usebasin.com/f/%s\"" site.Params.basin_id }}
     {{end}}
 
     <div class="mb-3">
