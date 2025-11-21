@@ -9,7 +9,7 @@ title = "Academia"
 
 # Hero image (optional). Enter filename of an image in the `static/img/` folder.
 # Add a query string to bust CDN/cache when updating the image.
-hero_media = "kebin2.jpeg?v=2"
+hero_media = "kebin2.jpeg?v=3"
 
 [design.background]
   # Apply a background color, gradient, or image.
