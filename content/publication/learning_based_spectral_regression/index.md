@@ -13,6 +13,7 @@ authors:
   - Henry Arguello
   - Jorge Bacca
 date: "2025-10-27T00:00:00Z"
+doi: "10.48550/arXiv.2510.23892"
 publishDate: "2025-10-27T00:00:00Z"
 
 publication_types: ["3"]
@@ -32,6 +33,7 @@ tags:
 featured: false
 
 url_pdf: "https://arxiv.org/pdf/2510.23892"
+url_source: "https://arxiv.org/abs/2510.23892"
 
 image:
   caption: ""

@@ -67,6 +67,11 @@
       <div class="{{ if or $st.Params.content.filter_button (eq $st.Params.design.view 3) }}isotope projects-container{{end}} {{if eq $st.Params.design.view 3}}js-layout-masonry{{else}}row js-layout-row{{end}} {{ if eq $st.Params.design.view 5 }}project-showcase mt-5{{end}}">
         {{/* Sort by weight if provided, otherwise fallback to date desc */}}
         {{ $pages := where site.RegularPages "Type" $items_type }}
+        {{/* Bibliographic records are language-neutral; reuse the canonical records
+            on translated homepages until a record has its own translation. */}}
+        {{ if and (ne site.Language.Lang "en") (eq (len $pages) 0) }}
+          {{ $pages = where site.Sites.Default.RegularPages "Type" $items_type }}
+        {{ end }}
         {{/* Split into pages with weight and without weight, list weighted first */}}
           {{ $weighted := where $pages ".Params.weight" "ne" nil }}
           {{ $unweighted := where $pages ".Params.weight" "==" nil }}

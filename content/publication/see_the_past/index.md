@@ -6,6 +6,7 @@ authors:
   - Mauro Dalla Mura
   - Jorge Bacca
 date: "2025-10-06T00:00:00Z"
+doi: "10.48550/arXiv.2510.05408"
 publishDate: "2025-10-06T00:00:00Z"
 
 publication_types: ["3"]
@@ -25,6 +26,7 @@ tags:
 featured: false
 
 url_pdf: "https://arxiv.org/pdf/2510.05408"
+url_source: "https://arxiv.org/abs/2510.05408"
 
 image:
   caption: ""

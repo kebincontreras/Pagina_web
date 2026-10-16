@@ -1,14 +1,14 @@
 ---
-title: "Deep Learning-Based Spectral Band Selection for Spectral Imaging Tasks"
+title: "Deep learning-based spectral band selection for hyperspectral imaging tasks"
 authors:
   - Emmanuel Martinez
   - Kebin Contreras
   - Jorge Bacca
-date: "2025-11-07T00:00:00Z"
-doi: "10.1364/opticaopen.29374277.v2"
+date: "2026-03-03T00:00:00Z"
+doi: "10.1364/AO.586969"
 
 # Schedule page publish date (NOT publication's date).
-publishDate: "2025-11-07T00:00:00Z"
+publishDate: "2026-03-03T00:00:00Z"
 
 weight: 99
 
@@ -19,10 +19,10 @@ weight: 99
 publication_types: ["2"]
 
 # Publication name and optional abbreviated publication name.
-publication: In *Optica Open | Journal*
-publication_short: In *Optica Open*
+publication: In *Applied Optics, 65(13), F75–F85*
+publication_short: In *Applied Optics*
 
-abstract: Spectral Images (SI) are acquired at multiple wavelengths across the electromagnetic spectrum, providing information that enhances performance in tasks such as material segmentation and classification by resolving ambiguities inherent in RGB images. SI devices are designed to capture a large number of spectral bands, which increases both cost and acquisition time, thereby limiting their practical deployment. However, not all spectral bands contribute equally to task-specific performance. To address this issue, a Deep Spectral Band Selection (DSBS) framework is proposed for spectral imaging tasks. Unlike previous methods that emphasize the preservation of non-task-specific information, DSBS identifies the most informative bands for a given task by jointly training a fully differentiable band selector and a neural network within an end-to-end learning framework. The selection process is guided by a proposed bin function and a custom lp-norm regularization term to achieve the desired number of spectral bands. Experimental results in material segmentation and classification tasks indicate that DSBS outperforms state-of-the-art machine and deep learning methods.
+abstract: An end-to-end framework that jointly learns task-specific hyperspectral band selection and a neural model for classification and segmentation.
 
 # Summary. An optional shortened abstract.
 summary:
@@ -36,6 +36,7 @@ links:
 #- name: Custom Link
 #  url: http://example.org
 url_pdf: "papers/Deep_Learning-Based_Spectral_Band_Selection_for_Spectral_Imaging_Tasks.pdf"
+url_source: "https://opg.optica.org/ao/abstract.cfm?uri=ao-65-13-F75"
 # url_code: '#'
 # url_dataset: '#'
 # url_poster: '#'

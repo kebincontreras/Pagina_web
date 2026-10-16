@@ -4,7 +4,7 @@ authors:
   - Kebin Contreras
   - Brayan Monroy
   - Jorge Bacca
-date: "2025-11-19T00:00:00Z"
+date: "2025-05-12T00:00:00Z"
 doi: "10.1007/978-3-031-91767-7_12"
 
 # Schedule page publish date (NOT publication's date).
@@ -19,8 +19,8 @@ weight: 2
 publication_types: ["1"]
 
 # Publication name and optional abbreviated publication name.
-publication: In *ECCV 2024 | European Computer Vision Association (ECVA)*
-publication_short: In *ECCV*
+publication: In *ECCV 2024 Workshops, Part VII, LNCS 15629, pp. 171–180*
+publication_short: In *ECCV 2024 Workshops*
 
 abstract: Object detection precision is crucial for ensuring the safety and efficacy of autonomous driving systems. The quality of acquired images directly influences the ability of autonomous driving systems to correctly recognize and respond to other vehicles, pedestrians, and obstacles in real-time. However, real environments present extreme variations in lighting, causing saturation problems and resulting in the loss of crucial details for detection. Traditionally, High Dynamic Range (HDR) images have been preferred for their ability to capture a broad spectrum of light intensities, but the need for multiple captures to construct HDR images is inefficient for real-time applications in autonomous vehicles. To address these issues, this work introduces the use of modulo sensors for robust object detection. The modulo sensor allows pixels to ‘reset/wrap’ upon reaching saturation level by acquiring an irradiance encoding image which can then be recovered using unwrapping algorithms. The applied reconstruction techniques enable HDR recovery of color intensity and image details, ensuring better visual quality even under extreme lighting conditions at the cost of extra time. Experiments with the YOLOv10 model demonstrate that images processed using modulo images achieve performance comparable to HDR images and significantly surpass saturated images in terms of object detection accuracy. Moreover, the proposed modulo imaging step combined with HDR image reconstruction is shorter than the time required for conventional HDR image acquisition.
 
@@ -38,6 +38,7 @@ links:
 #  url: http://example.org
 url_pdf: "papers/High_Dynamic_Range_Modulo_Imaging_for_Robust_Object_Detection_in_Autonomous_Driving.pdf"
 url_code: 'https://github.com/kebincontreras/ObjectDetectionModulo'
+url_source: "https://link.springer.com/chapter/10.1007/978-3-031-91767-7_12"
 # url_dataset: '#'
 # url_poster: '#'
 # url_project: ''

@@ -6,7 +6,7 @@ active = true  # Activate this widget? true/false
 weight = 15  # Order that this section will appear.
 
 title = "PUBLICATIONS"
-subtitle = "My published research journals and conference papers"
+subtitle = "Journal articles, conference papers, and preprints"
 
 [content]
   # Page type to display. E.g. project.

@@ -3,7 +3,7 @@ title: "Computational Correction of Eye Aberrations: A Physical Modeling Approac
 authors:
   - Kebin Contreras
   - Jorge Bacca
-date: "2025-11-20T00:00:00Z"
+date: "2025-08-27T00:00:00Z"
 doi: "10.1109/STSIVA66383.2025.11156245"
 
 # Schedule page publish date (NOT publication's date).
@@ -37,6 +37,7 @@ links:
 #- name: Custom Link
 #  url: http://example.org
 url_pdf: "papers/Computational_Correction_of_Eye_Aberrations_A_Physical_Modeling_Approach_with_Zernike_Polynomials_and_Deep_Learning.pdf"
+url_source: "https://xplorestaging.ieee.org/document/11156245/"
 # url_code: '#'
 # url_dataset: '#'
 # url_poster: '#'

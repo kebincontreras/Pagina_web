@@ -4,13 +4,13 @@ summary:
 tags:
   - Computer Vision
   - Deep Learning
-date: "2024-09-29T00:00:00Z"
+date: "2025-05-12T00:00:00Z"
 publication_link: "/publication/autor_modulo/"
 authors:
   - Brayan Monroy
   - Kebin Contreras
   - Jorge Bacca
-publication: ECCV 2024 | European Computer Vision Association (ECVA)
+publication: Computer Vision – ECCV 2024 Workshops, Part IX, LNCS 15631, pp. 211–228
 
 image:
   caption:

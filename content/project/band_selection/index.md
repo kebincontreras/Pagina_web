@@ -1,10 +1,10 @@
 ---
-title: "Deep Learning-Based Spectral Band Selection for Spectral Imaging Tasks"
+title: "Deep learning-based spectral band selection for hyperspectral imaging tasks"
 summary: 
 tags:
   - Deep Learning
   - Image Processing
-date: "2025-11-07T00:00:00Z"
+date: "2026-03-03T00:00:00Z"
 
 weight: 99
 publication_link: "/publication/band_selection/"
@@ -12,7 +12,7 @@ authors:
   - Emmanuel Martinez
   - Kebin Contreras
   - Jorge Bacca
-publication: Optica Open | Journal
+publication: Applied Optics, 65(13), F75–F85
 image:
   caption:
   focal_point: Smart

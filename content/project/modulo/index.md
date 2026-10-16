@@ -14,7 +14,7 @@ authors:
   - Brayan Monroy
   - Jorge Bacca
 publication_badge: "🏆 BEST PAPER AWARD"
-publication: "ECCV 2024 | European Computer Vision Association (ECVA)"
+publication: "ECCV 2024 Workshops, Part VII, LNCS 15629, pp. 171–180"
 image:
   caption:
   focal_point: Smart

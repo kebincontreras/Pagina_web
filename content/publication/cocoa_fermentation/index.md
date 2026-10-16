@@ -5,7 +5,7 @@ authors:
   - Juan Espinosa
   - Kebin Contreras
   - Jorge Bacca
-date: "2025-11-18T00:00:00Z"
+date: "2025-08-27T00:00:00Z"
 doi: "10.1109/STSIVA66383.2025.11156348"
 
 # Schedule page publish date (NOT publication's date).
@@ -38,6 +38,7 @@ links:
 #- name: Custom Link
 #  url: http://example.org
 url_pdf: "papers/Automated_Classification_of_Cocoa_Bean_Fermentation_Levels_Using_Computer_Vision.pdf"
+url_source: "https://www.proceedings.com/content/082/082344webtoc.pdf"
 # url_code: '#'
 # url_dataset: '#'
 # url_poster: '#'

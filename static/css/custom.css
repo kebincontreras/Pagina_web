@@ -1,1 +1,16 @@
-/* Custom styles can be added here */
+/* Minimal monochrome experience list. Institutional logos retain their own colors. */
+.experience-list { max-width: 760px; }
+.experience-entry { display: flex; gap: 1.15rem; align-items: flex-start; padding: 1.35rem 0; border-bottom: 1px solid rgba(0,0,0,.15); }
+.experience-entry:first-of-type { padding-top: 0; }
+.experience-logo { width: 48px; height: 48px; flex: 0 0 48px; object-fit: contain; border-radius: 6px; }
+.experience-entry-content { min-width: 0; }
+.experience-entry .exp-title { margin: 0 0 .2rem; color: inherit; font-size: 1.08rem; font-weight: 700; line-height: 1.35; }
+.experience-entry .exp-company, .experience-entry .exp-meta { margin: 0; line-height: 1.55; }
+.experience-entry .exp-company a { color: inherit; }
+.experience-entry .employment-type, .experience-entry .exp-meta { color: #6c757d; }
+.dark .experience-entry { border-color: rgba(255,255,255,.18); }
+.btn-primary, .btn-outline-primary:hover, .btn-primary:hover, .btn-primary:focus { background: #212121; border-color: #212121; color: #fff; }
+.btn-outline-primary { color: #212121; border-color: #212121; }
+a, a:hover, a:focus { color: #212121; }
+.dark a, .dark a:hover, .dark a:focus { color: #f1f1f1; }
+@media (max-width: 575.98px) { .experience-entry { gap: .85rem; padding: 1rem 0; } .experience-logo { width: 40px; height: 40px; flex-basis: 40px; } }

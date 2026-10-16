@@ -4,11 +4,11 @@ authors:
   - Brayan Monroy
   - Kebin Contreras
   - Jorge Bacca
-date: "2024-09-29T00:00:00Z"
+date: "2025-05-12T00:00:00Z"
 doi: "10.1007/978-3-031-91838-4_13"
 
 # Schedule page publish date (NOT publication's date).
-publishDate: "2024-09-29T00:00:00Z"
+publishDate: "2025-05-12T00:00:00Z"
 
 # Publication type.
 # Legend: 0 = Uncategorized; 1 = Conference paper; 2 = Journal article;
@@ -17,8 +17,8 @@ publishDate: "2024-09-29T00:00:00Z"
 publication_types: ["1"]
 
 # Publication name and optional abbreviated publication name.
-publication: In *ECCV 2024 | European Computer Vision Association (ECVA)*
-publication_short: In *STSIVA*
+publication: In *Computer Vision – ECCV 2024 Workshops, Part IX, LNCS 15631, pp. 211–228*
+publication_short: In *ECCV 2024 Workshops*
 
 abstract: High dynamic range (HDR) imaging is vital for capturing the full range of light tones in scenes, essential for computer vision tasks such as autonomous driving. Standard commercial imaging systems face limitations in capacity for well depth, and quantization precision, hindering their HDR capabilities. Modulo imaging, based on unlimited sampling (US) theory, addresses these limitations by using a modulo analog-to-digital approach that resets signals upon saturation, enabling estimation of pixel resets through neighboring pixel intensities. Despite the effectiveness of (US) algorithms in one-dimensional signals, their optimization problem for two-dimensional signals remains unclear. This work formulates the US framework as an autoregressive l2 phase unwrapping problem, providing computationally efficient solutions in the discrete cosine domain jointly with a stride removal algorithm also based on spatial differences. By leveraging higher-order finite differences for two-dimensional images, our approach enhances HDR image reconstruction from modulo images, demonstrating its efficacy in improving object detection in autonomous driving scenes without retraining.
 
@@ -34,6 +34,7 @@ links:
 # - name: "https://link.springer.com/chapter/10.1007/978-3-031-91838-4_13"
 # url: 
 url_pdf: "papers/Autoregressive_High-Order_Finite_Difference_Modulo_Imaging_High-Dynamic_Range_for_Computer_Vision_Applications.pdf"
+url_source: "https://link.springer.com/chapter/10.1007/978-3-031-91838-4_13"
 # url_code: '#'
 # url_dataset: '#'
 # url_poster: '#'
