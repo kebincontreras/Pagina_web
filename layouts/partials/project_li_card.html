@@ -6,15 +6,37 @@
 {{ $item := .item }}
 {{ $link := cond (isset $item.Params "publication_link") $item.Params.publication_link .link }}
 {{ $target := .target }}
+{{/* Localized records retain their translated title and citation, while PDF
+     resource metadata lives on the canonical English record. */}}
+{{ $resource_page := $item }}
+{{ if not $item.Params.pdf_url }}
+  {{ with site.Sites.Default.GetPage $item.TranslationKey }}{{ $resource_page = . }}{{ end }}
+{{ end }}
+{{ $pdf_url := $resource_page.Params.pdf_url | default "" }}
+{{ $pdf_is_local := and $pdf_url (not (hasPrefix $pdf_url "http")) }}
 {{ $js_tag_classes := delimit (apply (apply $item.Params.tags "replace" "." " " "-") "printf" "js-id-%s" ".") " " }}
 {{ $w := cond (isset $item.Params "weight") $item.Params.weight 9999 }}
 {{ $publication := $item.Params.publication | default "" }}
-{{ $publication_lower := lower $publication }}
-{{ $is_preprint := or (in $publication_lower "preprint") (in $publication_lower "arxiv") (in $item.Params.tags "Preprint") }}
+{{ $publication_display := replace (replace $publication "Preprint · " "") "arXiv preprint " "" }}
+{{ $record_label := "DOI / record" }}
+{{ $code_label := "Code" }}
+{{ $data_label := "Data" }}
+{{ if eq site.Language.Lang "es" }}
+  {{ $record_label = "DOI / ficha" }}
+  {{ $code_label = "Código" }}
+  {{ $data_label = "Datos" }}
+{{ else if eq site.Language.Lang "fr" }}
+  {{ $record_label = "DOI / notice" }}
+  {{ $data_label = "Données" }}
+{{ end }}
 
 <article class="publication-record project-item isotope-item w-100 {{ $js_tag_classes | safeHTMLAttr }}" data-weight="{{ $w }}" itemscope itemtype="https://schema.org/ScholarlyArticle">
   <h3 class="publication-record__title" itemprop="name">
-    <a href="{{ $link }}" {{ $target | safeHTMLAttr }}>{{ $item.Title | markdownify | emojify }}</a>
+    {{ if $pdf_url }}
+    <a href="{{ if $pdf_is_local }}{{ $pdf_url | relURL }}{{ else }}{{ $pdf_url }}{{ end }}"{{ if $pdf_is_local }} download{{ end }} itemprop="url">{{ $item.Title | markdownify | emojify }}</a>
+    {{ else }}
+    <a href="{{ $link }}" {{ $target | safeHTMLAttr }} itemprop="url">{{ $item.Title | markdownify | emojify }}</a>
+    {{ end }}
   </h3>
 
   {{ with $item.Params.authors }}
@@ -22,17 +44,16 @@
   {{ end }}
 
   <p class="publication-record__venue">
-    {{ with $publication }}<span itemprop="isPartOf">{{ . | markdownify | emojify }}</span>{{ end }}
+    {{ with $publication_display }}<span itemprop="isPartOf">{{ . | markdownify | emojify }}</span>{{ end }}
     {{ if and $publication $item.Date }}<span aria-hidden="true"> · </span>{{ end }}
     {{ with $item.Date }}<time datetime="{{ .Format "2006-01-02" }}" itemprop="datePublished">{{ .Format "2006" }}</time>{{ end }}
-    {{ if $is_preprint }}<span class="publication-record__status">Preprint</span>{{ end }}
   </p>
 
-  {{ with $item.Params.links }}
+  {{ if or $resource_page.Params.source_url $resource_page.Params.code_url $resource_page.Params.dataset_url }}
   <nav class="publication-record__links" aria-label="Publication links">
-    {{ range . }}
-      <a href="{{ .url }}" target="_blank" rel="noopener">{{ .name }}</a>
-    {{ end }}
+    {{ with $resource_page.Params.source_url }}<a href="{{ . }}" target="_blank" rel="noopener">{{ $record_label }}</a>{{ end }}
+    {{ with $resource_page.Params.code_url }}<a href="{{ . }}" target="_blank" rel="noopener">{{ $code_label }}</a>{{ end }}
+    {{ with $resource_page.Params.dataset_url }}<a href="{{ . }}" target="_blank" rel="noopener">{{ $data_label }}</a>{{ end }}
   </nav>
   {{ end }}
 </article>

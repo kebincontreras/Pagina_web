@@ -9,6 +9,8 @@ date: "2025-10-06T00:00:00Z"
 
 weight: 4
 publication_link: "/publication/see_the_past/"
+pdf_url: "https://arxiv.org/pdf/2510.05408"
+source_url: "https://arxiv.org/abs/2510.05408"
 authors:
   - Kebin Contreras
   - Luis Toscano-Palomino

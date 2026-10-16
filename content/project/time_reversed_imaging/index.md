@@ -7,6 +7,8 @@ tags:
   - Reconstruction
 date: "2026-07-24T00:00:00Z"
 publication_link: "/publication/time_reversed_imaging/"
+pdf_url: "https://arxiv.org/pdf/2607.22352"
+source_url: "https://arxiv.org/abs/2607.22352"
 authors:
   - Jorge Bacca
   - Kebin Contreras

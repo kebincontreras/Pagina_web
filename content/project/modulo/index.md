@@ -9,6 +9,9 @@ date: "2025-05-12T00:00:00Z"
 
 weight: 2
 publication_link: "/publication/modulo/"
+pdf_url: "/papers/High_Dynamic_Range_Modulo_Imaging_for_Robust_Object_Detection_in_Autonomous_Driving.pdf"
+source_url: "https://link.springer.com/chapter/10.1007/978-3-031-91767-7_12"
+code_url: "https://github.com/kebincontreras/ObjectDetectionModulo"
 authors:
   - Kebin Contreras
   - Brayan Monroy
