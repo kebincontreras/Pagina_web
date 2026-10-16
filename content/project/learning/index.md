@@ -12,6 +12,7 @@ publication_link: "/publication/learning_based_spectral_regression/"
 pdf_url: "/papers/Learning-based.pdf"
 source_url: "https://arxiv.org/abs/2510.23892"
 pdf_license_url: "https://creativecommons.org/licenses/by/4.0/"
+pdf_license_label: "CC BY 4.0"
 authors:
   - Kebin Contreras
   - Emmanuel Martinez

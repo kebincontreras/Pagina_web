@@ -7,9 +7,11 @@ tags:
   - Dataset
 date: "2025-11-27T00:00:00Z"
 publication_link: "/publication/cocoa_hyperspectral_dataset/"
-pdf_url: "https://www.nature.com/articles/s41597-025-06314-9.pdf"
+pdf_url: "/papers/CoCoaSpec.pdf"
 source_url: "https://www.nature.com/articles/s41597-025-06314-9"
 code_url: "https://github.com/kebincontreras/CoCoaSpec"
+pdf_license_url: "https://creativecommons.org/licenses/by-nc-nd/4.0/"
+pdf_license_label: "CC BY-NC-ND 4.0"
 authors:
   - Kebin Contreras
   - Mohamad Jouni

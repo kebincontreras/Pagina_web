@@ -54,7 +54,7 @@
     {{ with $resource_page.Params.source_url }}<a href="{{ . }}" target="_blank" rel="noopener">{{ $record_label }}</a>{{ end }}
     {{ with $resource_page.Params.code_url }}<a href="{{ . }}" target="_blank" rel="noopener">{{ $code_label }}</a>{{ end }}
     {{ with $resource_page.Params.dataset_url }}<a href="{{ . }}" target="_blank" rel="noopener">{{ $data_label }}</a>{{ end }}
-    {{ with $resource_page.Params.pdf_license_url }}<a href="{{ . }}" target="_blank" rel="license noopener">CC BY 4.0</a>{{ end }}
+    {{ with $resource_page.Params.pdf_license_url }}<a href="{{ . }}" target="_blank" rel="license noopener">{{ $resource_page.Params.pdf_license_label | default "License" }}</a>{{ end }}
   </nav>
   {{ end }}
 </article>

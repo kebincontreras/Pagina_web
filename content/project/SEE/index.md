@@ -12,6 +12,7 @@ publication_link: "/publication/see_the_past/"
 pdf_url: "/papers/SEE.pdf"
 source_url: "https://arxiv.org/abs/2510.05408"
 pdf_license_url: "https://creativecommons.org/licenses/by/4.0/"
+pdf_license_label: "CC BY 4.0"
 authors:
   - Kebin Contreras
   - Luis Toscano-Palomino
