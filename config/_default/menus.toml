@@ -24,6 +24,11 @@
   weight = 50
 
 [[main]]
+  name = "Appointment"
+  url = "https://calendar.app.google/wWgTUmR3gFz7iKP86"
+  weight = 55
+
+[[main]]
   name = "Resume"
   url = "/authors/admin/"
   weight = 60

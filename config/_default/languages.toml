@@ -28,6 +28,10 @@
     name = "Contacto"
     url = "#contact"
     weight = 50
+  [[es.menu.main]]
+    name = "Cita"
+    url = "https://calendar.app.google/wWgTUmR3gFz7iKP86"
+    weight = 55
 
 [fr]
   languageCode = "fr"
@@ -50,6 +54,10 @@
     name = "Contact"
     url = "#contact"
     weight = 50
+  [[fr.menu.main]]
+    name = "Rendez-vous"
+    url = "https://calendar.app.google/wWgTUmR3gFz7iKP86"
+    weight = 55
 
 # Uncomment the lines below to configure your website in a second language.
 #[zh]
