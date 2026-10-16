@@ -8,12 +8,6 @@ hero_media = "hero_photo.jpeg"
 [design.background]
 color = "#fff"
 text_color_light = false
-[btn]
-url = "#experience"
-label = "Expérience"
-[btn_alt]
-url = "#contact"
-label = "Contact"
 [[social]]
 icon = "envelope"
 icon_pack = "fas"

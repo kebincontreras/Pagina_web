@@ -62,8 +62,8 @@ address = "GIPSA-lab, 11 rue des Mathématiques, 38402 Saint-Martin-d’Hères C
 office_hours = """Monday – Friday 09:00 – 12:00<br>
                   Monday – Friday 14:00 – 18:00 (Europe/Paris)"""
 
-# Enter an optional link for booking appointments (e.g. calendly.com).
-appointment_url = "https://calendly.com"
+# Enter the verified booking URL when available. Leave blank so no non-functional booking link is shown.
+appointment_url = ""
 
 # Contact links
 #   Set to `[]` to disable, or comment out unwanted lines with a hash `#`.

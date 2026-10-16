@@ -30,18 +30,6 @@ hero_media = "hero_photo.jpeg"
   # Text color (true=light or false=dark).
   text_color_light = false
 
-# Call to action links (optional).
-#   Display link(s) by specifying a URL and label below. Icon is optional for `[cta]`.
-#   Remove a link/note by deleting a cta/note block.
-[btn]
-  url = "authors/admin/"
-  label = "About me"
-  
-[btn_alt]
-  url = "#contact"
-  label = "Contact me"
-
-
 # Social/academia Networking
 [[social]]
   icon = "envelope"
