@@ -14,3 +14,29 @@
 a, a:hover, a:focus { color: #212121; }
 .dark a, .dark a:hover, .dark a:focus { color: #f1f1f1; }
 @media (max-width: 575.98px) { .experience-entry { gap: .85rem; padding: 1rem 0; } .experience-logo { width: 40px; height: 40px; flex-basis: 40px; } }
+
+/* Compact scholarly bibliography on the Publications section. */
+.publication-record {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, .14);
+}
+.publication-record:first-child { border-top: 1px solid rgba(0, 0, 0, .14); }
+.publication-record__title { margin: 0 0 .3rem; font-size: 1.08rem; font-weight: 650; line-height: 1.42; }
+.publication-record__title a { text-decoration: none; }
+.publication-record__title a:hover, .publication-record__title a:focus { text-decoration: underline; }
+.publication-record__authors, .publication-record__venue { margin: 0; font-size: .94rem; line-height: 1.55; }
+.publication-record__authors { color: #4d4d4d; }
+.publication-record__venue { color: #6c757d; }
+.publication-record__status { display: inline-block; margin-left: .55rem; padding: .06rem .42rem; border: 1px solid currentColor; border-radius: 999px; font-size: .76rem; font-weight: 600; line-height: 1.35; vertical-align: .08rem; }
+.publication-record__links { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: .45rem; font-size: .88rem; }
+.publication-record__links a { text-decoration: underline; text-underline-offset: .14em; }
+.dark .publication-record { border-color: rgba(255, 255, 255, .2); }
+.dark .publication-record__authors { color: #d1d1d1; }
+.dark .publication-record__venue { color: #b9b9b9; }
+@media (max-width: 575.98px) {
+  .publication-record { padding: .9rem 0; }
+  .publication-record__title { font-size: 1rem; }
+  .publication-record__authors, .publication-record__venue { font-size: .9rem; }
+}

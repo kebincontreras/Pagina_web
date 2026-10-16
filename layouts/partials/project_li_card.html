@@ -1,0 +1,38 @@
+{{/*
+  Compact scholarly record used by the publications portfolio on each locale's
+  homepage.  Keep bibliographic content in content/project; this partial only
+  controls its presentation.
+*/}}
+{{ $item := .item }}
+{{ $link := cond (isset $item.Params "publication_link") $item.Params.publication_link .link }}
+{{ $target := .target }}
+{{ $js_tag_classes := delimit (apply (apply $item.Params.tags "replace" "." " " "-") "printf" "js-id-%s" ".") " " }}
+{{ $w := cond (isset $item.Params "weight") $item.Params.weight 9999 }}
+{{ $publication := $item.Params.publication | default "" }}
+{{ $publication_lower := lower $publication }}
+{{ $is_preprint := or (in $publication_lower "preprint") (in $publication_lower "arxiv") (in $item.Params.tags "Preprint") }}
+
+<article class="publication-record project-item isotope-item w-100 {{ $js_tag_classes | safeHTMLAttr }}" data-weight="{{ $w }}" itemscope itemtype="https://schema.org/ScholarlyArticle">
+  <h3 class="publication-record__title" itemprop="name">
+    <a href="{{ $link }}" {{ $target | safeHTMLAttr }}>{{ $item.Title | markdownify | emojify }}</a>
+  </h3>
+
+  {{ with $item.Params.authors }}
+  <p class="publication-record__authors" itemprop="author">{{ delimit . ", " | markdownify | emojify }}</p>
+  {{ end }}
+
+  <p class="publication-record__venue">
+    {{ with $publication }}<span itemprop="isPartOf">{{ . | markdownify | emojify }}</span>{{ end }}
+    {{ if and $publication $item.Date }}<span aria-hidden="true"> · </span>{{ end }}
+    {{ with $item.Date }}<time datetime="{{ .Format "2006-01-02" }}" itemprop="datePublished">{{ .Format "2006" }}</time>{{ end }}
+    {{ if $is_preprint }}<span class="publication-record__status">Preprint</span>{{ end }}
+  </p>
+
+  {{ with $item.Params.links }}
+  <nav class="publication-record__links" aria-label="Publication links">
+    {{ range . }}
+      <a href="{{ .url }}" target="_blank" rel="noopener">{{ .name }}</a>
+    {{ end }}
+  </nav>
+  {{ end }}
+</article>
