@@ -9,8 +9,9 @@ date: "2025-10-27T00:00:00Z"
 
 weight: 3
 publication_link: "/publication/learning_based_spectral_regression/"
-pdf_url: "https://arxiv.org/pdf/2510.23892"
+pdf_url: "/papers/Learning-based.pdf"
 source_url: "https://arxiv.org/abs/2510.23892"
+pdf_license_url: "https://creativecommons.org/licenses/by/4.0/"
 authors:
   - Kebin Contreras
   - Emmanuel Martinez

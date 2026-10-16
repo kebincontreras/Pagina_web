@@ -49,11 +49,12 @@
     {{ with $item.Date }}<time datetime="{{ .Format "2006-01-02" }}" itemprop="datePublished">{{ .Format "2006" }}</time>{{ end }}
   </p>
 
-  {{ if or $resource_page.Params.source_url $resource_page.Params.code_url $resource_page.Params.dataset_url }}
+  {{ if or $resource_page.Params.source_url $resource_page.Params.code_url $resource_page.Params.dataset_url $resource_page.Params.pdf_license_url }}
   <nav class="publication-record__links" aria-label="Publication links">
     {{ with $resource_page.Params.source_url }}<a href="{{ . }}" target="_blank" rel="noopener">{{ $record_label }}</a>{{ end }}
     {{ with $resource_page.Params.code_url }}<a href="{{ . }}" target="_blank" rel="noopener">{{ $code_label }}</a>{{ end }}
     {{ with $resource_page.Params.dataset_url }}<a href="{{ . }}" target="_blank" rel="noopener">{{ $data_label }}</a>{{ end }}
+    {{ with $resource_page.Params.pdf_license_url }}<a href="{{ . }}" target="_blank" rel="license noopener">CC BY 4.0</a>{{ end }}
   </nav>
   {{ end }}
 </article>
