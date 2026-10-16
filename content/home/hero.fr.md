@@ -21,7 +21,7 @@ link = "#contact"
 [[social]]
 icon = "linkedin"
 icon_pack = "fab"
-link = "https://www.linkedin.com/in/kebin-andres-contreras-2995b6199"
+link = "https://www.linkedin.com/in/kebin-contreras-2995b6199/"
 [[social]]
 icon = "google-scholar"
 icon_pack = "ai"

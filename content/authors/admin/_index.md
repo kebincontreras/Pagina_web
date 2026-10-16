@@ -54,7 +54,7 @@ social:
   link: '#contact'
 - icon: linkedin
   icon_pack: fab
-  link: https://www.linkedin.com/in/kebin-andres-contreras-2995b6199
+  link: https://www.linkedin.com/in/kebin-contreras-2995b6199/
 - icon: google-scholar
   icon_pack: ai
   link: https://scholar.google.com/citations?user=s-Una0EAAAAJ&hl=es
