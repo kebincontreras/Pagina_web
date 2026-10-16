@@ -56,11 +56,11 @@ time_format = "3:04 PM"
 email = "kebinandrescontreras@gmail.com"
 basin_id = "d2e8e1ed1c21"
 phone = "+57 3058289322"
-address = "Industrial University of Santander, 680002, Bucaramanga, Santader, Colombia"
+address = "GIPSA-lab, 11 rue des Mathématiques, 38402 Saint-Martin-d’Hères Cedex, France"
 
 # Office hours: use `<br>` to insert a line break, or set to "" to remove office hours
-office_hours = """Monday - Saturday 08:00 to 18:00<br>
-                  Sunday 08:00 to 12:00"""
+office_hours = """Monday – Friday 09:00 – 12:00<br>
+                  Monday – Friday 14:00 – 18:00 (Europe/Paris)"""
 
 # Enter an optional link for booking appointments (e.g. calendly.com).
 appointment_url = "https://calendly.com"
@@ -92,8 +92,8 @@ contact_links = [
 #   3: OpenStreetMap (Mapbox)
 map = 2
 map_api_key = "AIzaSyBu5nZKbeK-WHQ70oqOWo-_4VmwOwKP9YQ"
-latitude = "7.141231024522966"
-longitude = "-73.12295265963024"
+latitude = "45.1942356"
+longitude = "5.7718967"
 zoom = 15
 
 ############################
