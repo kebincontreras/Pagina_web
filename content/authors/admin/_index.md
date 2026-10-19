@@ -5,11 +5,6 @@ avatar_image: "kebin.jpeg"
 # Username (this should match the folder name)
 authors:
 - admin
-# resume download button
-btn:
-- url : "/files/CV_Kebin_Contreras.pdf"
-  label : "Download CV"
-
 # Is this the primary user of the site?
 superuser: true
 
