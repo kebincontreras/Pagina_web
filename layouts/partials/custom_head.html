@@ -1,2 +1,15 @@
 <!-- Custom CSS for active navigation highlighting -->
 <link rel="stylesheet" href="{{ "/css/custom.css" | relURL }}">
+
+{{ if and (eq .Type "publication") .Params.scholar_metadata }}
+<meta name="citation_title" content="{{ .Title }}">
+{{ range .Params.authors }}
+<meta name="citation_author" content="{{ . }}">
+{{ end }}
+{{ with .Params.bibliographic_year }}
+<meta name="citation_publication_date" content="{{ . }}">
+{{ end }}
+{{ with .Params.url_pdf }}
+<meta name="citation_pdf_url" content="{{ printf "https://kebincontreras.com/%s" (strings.TrimPrefix "/" .) }}">
+{{ end }}
+{{ end }}
