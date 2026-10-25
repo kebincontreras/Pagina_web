@@ -40,7 +40,12 @@
   </h3>
 
   {{ with $item.Params.authors }}
-  <p class="publication-record__authors" itemprop="author">{{ delimit . ", " | markdownify | emojify }}</p>
+  {{ $authors := . }}
+  {{ $author_display := delimit $authors ", " }}
+  {{ if gt (len $authors) 2 }}
+    {{ $author_display = printf "%s et al." (delimit (first 2 $authors) ", ") }}
+  {{ end }}
+  <p class="publication-record__authors" itemprop="author">{{ $author_display | markdownify | emojify }}</p>
   {{ end }}
 
   <p class="publication-record__venue">
