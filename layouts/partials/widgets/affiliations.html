@@ -1,0 +1,24 @@
+{{ $page := .page }}
+
+<div class="row affiliations">
+  <div class="col-12 section-heading text-center">
+    {{ with $page.Title }}<h1>{{ . | markdownify | emojify }}</h1>{{ end }}
+    {{ with $page.Params.subtitle }}<p>{{ . | markdownify | emojify }}</p>{{ end }}
+  </div>
+  <div class="col-12">
+    <ul class="affiliations-grid" aria-label="{{ $page.Title | plainify }}">
+      {{ range $page.Params.affiliation }}
+      <li>
+        <a class="affiliation-card" href="{{ .url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ .name }} (opens in a new tab)">
+          <span class="affiliation-logo-wrap">
+            <img class="affiliation-logo" src="{{ .logo }}" alt="{{ .logo_alt }}" loading="lazy" decoding="async">
+          </span>
+          <span class="affiliation-name">{{ .name }}</span>
+          {{ with .description }}<span class="affiliation-description">{{ . }}</span>{{ end }}
+          <span class="affiliation-external" aria-hidden="true"><i class="fas fa-external-link-alt"></i></span>
+        </a>
+      </li>
+      {{ end }}
+    </ul>
+  </div>
+</div>
