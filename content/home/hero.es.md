@@ -5,6 +5,7 @@ active = true
 weight = 10
 title = "Academia"
 hero_media = "hero_photo.jpeg"
+affiliations_label = "Afiliaciones de investigación"
 [design.background]
 color = "#fff"
 text_color_light = false
@@ -28,6 +29,34 @@ link = "https://www.researchgate.net/profile/Kebin-Contreras"
 icon = "github"
 icon_pack = "fab"
 link = "https://github.com/kebincontreras"
+
+[[affiliation]]
+name = "PI Group"
+url = "https://pigroupuis.github.io/pigroup-research/"
+logo = "https://pigroupuis.github.io/pigroup-research/logo.png"
+logo_alt = "Logotipo de PI Group"
+dark_background = true
+[[affiliation]]
+name = "GOTS"
+url = "https://gots.site/"
+logo = "https://gots.site/logo.png"
+logo_alt = "Logotipo de GOTS"
+dark_background = true
+[[affiliation]]
+name = "GIPSA-lab"
+url = "https://www.gipsa-lab.grenoble-inp.fr/"
+logo = "https://www.gipsa-lab.grenoble-inp.fr/wp-content/uploads/2020/07/Logo-GIPSA-lab.png"
+logo_alt = "Logotipo de GIPSA-lab"
+[[affiliation]]
+name = "Université Grenoble Alpes"
+url = "https://www.univ-grenoble-alpes.fr/"
+logo = "https://www.univ-grenoble-alpes.fr/uas/UGA3/UGA_LOGO_ACCUEIL/logo_epe_couleur.svg"
+logo_alt = "Logotipo de Université Grenoble Alpes"
+[[affiliation]]
+name = "Universidad Industrial de Santander"
+url = "https://uis.edu.co/"
+logo = "https://uis.edu.co/wp-content/uploads/2020/07/Logo-UIS-web.webp"
+logo_alt = "Logotipo de Universidad Industrial de Santander"
 +++
 ## **Investigador en aprendizaje profundo y física**
 

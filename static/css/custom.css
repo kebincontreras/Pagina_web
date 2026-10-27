@@ -40,56 +40,33 @@ a, a:hover, a:focus { color: #212121; }
   .publication-record__authors, .publication-record__venue { font-size: .9rem; }
 }
 
-/* Linked research-group and institutional affiliations. */
-.affiliations-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 1rem;
-  max-width: 1080px;
-  margin: 2rem auto 0;
+/* Compact linked research affiliations below the profile's social links. */
+.affiliation-icons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .5rem;
+  margin: .7rem .5rem 0;
   padding: 0;
   list-style: none;
 }
-.affiliation-card {
-  position: relative;
+.affiliation-icon {
   display: flex;
-  min-height: 182px;
-  flex-direction: column;
+  width: 48px;
+  height: 48px;
   align-items: center;
   justify-content: center;
-  gap: .55rem;
-  padding: 1.1rem .9rem;
-  border: 1px solid rgba(0, 0, 0, .15);
-  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #d8d8d8;
+  border-radius: .35rem;
   background: #fff;
-  color: inherit;
-  text-align: center;
-  text-decoration: none;
-  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+  transition: box-shadow .18s ease, transform .18s ease;
 }
-.affiliation-card:hover,
-.affiliation-card:focus {
-  border-color: #212121;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, .12);
-  color: inherit;
-  text-decoration: none;
-  transform: translateY(-2px);
-}
-.affiliation-card:focus { outline: 3px solid rgba(33, 33, 33, .32); outline-offset: 3px; }
-.affiliation-logo-wrap { display: flex; width: 100%; height: 72px; align-items: center; justify-content: center; }
-.affiliation-logo { max-width: 100%; max-height: 72px; object-fit: contain; }
-.affiliation-name { font-weight: 700; line-height: 1.3; }
-.affiliation-description { color: #6c757d; font-size: .82rem; line-height: 1.35; }
-.affiliation-external { position: absolute; top: .65rem; right: .7rem; color: #6c757d; font-size: .72rem; }
-.dark .affiliation-card { border-color: rgba(255, 255, 255, .22); background: #202020; }
-.dark .affiliation-card:hover, .dark .affiliation-card:focus { border-color: #f1f1f1; box-shadow: 0 8px 20px rgba(0, 0, 0, .35); }
-.dark .affiliation-card:focus { outline-color: rgba(241, 241, 241, .4); }
-.dark .affiliation-description, .dark .affiliation-external { color: #c7c7c7; }
-@media (max-width: 991.98px) { .affiliations-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.affiliation-icon img { display: block; width: 84%; height: 84%; object-fit: contain; }
+.affiliation-icon--dark { border-color: #000; background: #000; }
+.affiliation-icon:hover { box-shadow: 0 3px 9px rgba(0, 0, 0, .23); transform: translateY(-1px); }
+.affiliation-icon:focus { outline: 3px solid rgba(33, 33, 33, .4); outline-offset: 3px; }
 @media (max-width: 575.98px) {
-  .affiliations-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin-top: 1.35rem; }
-  .affiliation-card { min-height: 158px; padding: .85rem .65rem; }
-  .affiliation-logo-wrap, .affiliation-logo { height: 58px; max-height: 58px; }
-  .affiliation-name { font-size: .92rem; }
-  .affiliation-description { font-size: .76rem; }
+  .affiliation-icons { gap: .4rem; margin-top: .6rem; }
+  .affiliation-icon { width: 42px; height: 42px; }
 }

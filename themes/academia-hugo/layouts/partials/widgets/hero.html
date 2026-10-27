@@ -74,6 +74,17 @@
         {{ end }}
       </ul>
       {{ end }}
+      {{ with $page.Params.affiliation }}
+      <ul class="affiliation-icons" aria-label="{{ $page.Params.affiliations_label }}">
+        {{ range . }}
+        <li>
+          <a class="affiliation-icon{{ if .dark_background }} affiliation-icon--dark{{ end }}" href="{{ .url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ .name }} (opens in a new tab)">
+            <img src="{{ .logo }}" alt="{{ .logo_alt }}" loading="lazy" decoding="async">
+          </a>
+        </li>
+        {{ end }}
+      </ul>
+      {{ end }}
     </div>
   </div>
 </div>
