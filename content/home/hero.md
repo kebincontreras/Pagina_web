@@ -88,9 +88,8 @@ link = "https://www.linkedin.com/in/kebin-contreras-2995b6199/"
 [[affiliation]]
   name = "Université Grenoble Alpes"
   url = "https://www.univ-grenoble-alpes.fr/"
-  logo = "https://www.univ-grenoble-alpes.fr/images/fo/logo_epe_NB.png"
+  logo = "https://www.univ-grenoble-alpes.fr/uas/UGA3/UGA_LOGO_ACCUEIL/logo_epe_couleur.svg"
   logo_alt = "Université Grenoble Alpes logo"
-  dark_background = true
 [[affiliation]]
   name = "Universidad Industrial de Santander"
   url = "https://uis.edu.co/"
