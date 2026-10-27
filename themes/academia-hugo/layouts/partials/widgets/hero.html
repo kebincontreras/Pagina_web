@@ -79,7 +79,11 @@
         {{ range . }}
         <li>
           <a class="affiliation-icon{{ if .dark_background }} affiliation-icon--dark{{ end }}" href="{{ .url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ .name }} (opens in a new tab)">
+            {{ if .emoji }}
+            <span class="affiliation-emoji" aria-hidden="true">{{ .emoji }}</span>
+            {{ else }}
             <img src="{{ .logo }}" alt="{{ .logo_alt }}" loading="lazy" decoding="async">
+            {{ end }}
           </a>
         </li>
         {{ end }}

@@ -63,6 +63,7 @@ a, a:hover, a:focus { color: #212121; }
   transition: box-shadow .18s ease, transform .18s ease;
 }
 .affiliation-icon img { display: block; width: 84%; height: 84%; object-fit: contain; }
+.affiliation-emoji { font-size: 1.65rem; line-height: 1; }
 .affiliation-icon--dark { border-color: #000; background: #000; }
 .affiliation-icon:hover { box-shadow: 0 3px 9px rgba(0, 0, 0, .23); transform: translateY(-1px); }
 .affiliation-icon:focus { outline: 3px solid rgba(33, 33, 33, .4); outline-offset: 3px; }

@@ -75,6 +75,17 @@ link = "https://www.linkedin.com/in/kebin-contreras-2995b6199/"
   logo = "https://www.gipsa-lab.grenoble-inp.fr/wp-content/uploads/2020/07/Logo-GIPSA-lab.png"
   logo_alt = "GIPSA-lab logo"
 [[affiliation]]
+  name = "PICSA"
+  url = "https://www.gipsa-lab.grenoble-inp.fr/recherche/departement-science-des-donnees-dsd/picsa/"
+  emoji = "🍕"
+  logo_alt = "PICSA custom pizza icon"
+[[affiliation]]
+  name = "MIRA"
+  url = "https://mira-imaging.github.io/members/"
+  logo = "https://mira-imaging.github.io/media/images/logos/mira/white_text.png"
+  logo_alt = "MIRA logo"
+  dark_background = true
+[[affiliation]]
   name = "Université Grenoble Alpes"
   url = "https://www.univ-grenoble-alpes.fr/"
   logo = "https://www.univ-grenoble-alpes.fr/images/fo/logo_epe_NB.png"
