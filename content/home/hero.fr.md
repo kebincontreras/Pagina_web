@@ -69,8 +69,6 @@ url = "https://uis.edu.co/"
 logo = "https://uis.edu.co/wp-content/uploads/2020/07/Logo-UIS-web.webp"
 logo_alt = "Logo de Universidad Industrial de Santander"
 +++
-## **Chercheur en apprentissage profond et physique**
+## **Chercheur en physique**
 
-Je suis chercheur et doctorant en physique à l’Universidad Industrial de Santander. Mes intérêts couvrent la vision par ordinateur, l’apprentissage automatique, l’optique computationnelle et l’intelligence artificielle responsable.
-
-Mon travail associe modélisation physique, optimisation numérique et apprentissage profond afin de développer des systèmes de perception sûrs, précis et efficaces pour l’imagerie médicale, l’optique et l’analyse spectrale.
+Je suis chercheur et doctorant en physique à l’Universidad Industrial de Santander. Je m’intéresse à la manière dont la lumière interagit avec les systèmes optiques et dont cette interaction détermine la formation des images. En particulier, je m’intéresse à l’œil en tant que système optique biologique : comment ses milieux et ses surfaces transforment la lumière et comment les aberrations influencent la vision. Mon travail aborde ces aberrations à partir de leurs fondements physiques, afin de comprendre leurs effets et d’explorer des moyens de les compenser.

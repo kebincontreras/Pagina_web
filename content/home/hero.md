@@ -97,9 +97,6 @@ link = "https://www.linkedin.com/in/kebin-contreras-2995b6199/"
   logo_alt = "Universidad Industrial de Santander logo"
 
 +++
-<!-- ## My name is **Michael Vahn** and I'm a **Professor** specializing in **Artificial Intelligence** -->
-## **Researcher in Deep Learning and Physics**
+## **Researcher in Physics**
 
-I am a researcher and Ph.D. student in Physics at Universidad Industrial de Santander, with research interests spanning Computer Vision, Machine Learning, Computational Optics, and Responsible Artificial Intelligence. 
-
-My work focuses on integrating physical modeling and numerical optimization with deep learning methods to develop safe, accurate, and efficient perception systems, with applications in medical imaging, optics, and spectral analysis. I have participated in interdisciplinary projects and published in international conferences and journals, directing my research toward the development of robust, interpretable, and ethically responsible solutions.
+I am a researcher and Ph.D. student in Physics at Universidad Industrial de Santander. I am interested in understanding how light interacts with optical systems and how this interaction determines image formation. In particular, I am interested in the eye as a biological optical system: how its media and surfaces transform light and how aberrations affect vision. My work approaches these aberrations from their physical foundations, with the aim of understanding their effects and exploring ways to compensate for them.
