@@ -71,3 +71,9 @@ a, a:hover, a:focus { color: #212121; }
   .affiliation-icons { gap: .4rem; margin-top: .6rem; }
   .affiliation-icon { width: 42px; height: 42px; }
 }
+
+/* Justify the introductory biography in every site language. */
+#hero .text-md-left > div > p {
+  text-align: justify;
+  text-align-last: left;
+}
