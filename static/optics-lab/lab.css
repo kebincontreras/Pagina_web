@@ -52,3 +52,10 @@
 @media(max-width:1150px){.optics-lab .lab-psfs{grid-template-columns:repeat(3,minmax(0,1fr))}.optics-lab .lab-total{grid-column:span 1}}
 @media(max-width:840px){.optics-lab.lab-active .lab-workspace{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:560px){.optics-lab .lab-charts{grid-template-columns:minmax(0,1fr)}.optics-lab .lab-psfs{grid-template-columns:repeat(2,minmax(0,1fr))}.optics-lab .lab-total{grid-column:1/-1}}
+
+.optics-lab .lab-psfs .lab-total canvas{max-width:230px}
+.optics-lab .lab-psfs .lab-total .lab-psf-axis{max-width:230px}
+.optics-lab label.lab-invalid{color:#b42334;font-weight:750}
+.optics-lab input[aria-invalid=true],.optics-lab select[aria-invalid=true]{border-color:#b42334;box-shadow:0 0 0 1px #b42334}
+.dark .optics-lab label.lab-invalid,.dark .optics-lab #error{color:#ff9da5}
+.dark .optics-lab input[aria-invalid=true],.dark .optics-lab select[aria-invalid=true]{border-color:#ff9da5;box-shadow:0 0 0 1px #ff9da5}

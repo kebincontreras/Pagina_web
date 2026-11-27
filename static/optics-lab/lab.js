@@ -10,9 +10,9 @@ const entries=[{id:'seidel-basic',title:'seidel',description:'desc',level:'basic
 const selected=entries.find(x=>x.id===param.get('sim'));
 const href=id=>id?'?sim='+id:location.pathname;
 const sections={
- en:{parameters:'Parameters',core:'Experiment',lens:'Lens and media',source:'Object',display:'Display options',gallery:'Point spread functions',galleryNote:'Paraxial plane · isolated terms use the same ±40 µm window · brightness relative to each PSF peak',wide:'Total · wide view',inset:'Total · same scale',screenExtra:'PSF at the current screen position',unitCrop:'±40 µm energy'},
- es:{parameters:'Parámetros',core:'Experimento',lens:'Lente y medios',source:'Objeto',display:'Opciones de visualización',gallery:'Funciones de dispersión puntual',galleryNote:'Plano paraxial · términos aislados en la misma ventana de ±40 µm · brillo relativo al máximo de cada PSF',wide:'Total · vista amplia',inset:'Total · misma escala',screenExtra:'PSF en la posición actual de la pantalla',unitCrop:'Energía en ±40 µm'},
- fr:{parameters:'Paramètres',core:'Expérience',lens:'Lentille et milieux',source:'Objet',display:'Options d’affichage',gallery:'Fonctions d’étalement du point',galleryNote:'Plan paraxial · termes isolés dans la même fenêtre de ±40 µm · luminosité relative au maximum de chaque PSF',wide:'Totale · vue large',inset:'Totale · même échelle',screenExtra:'PSF à la position actuelle de l’écran',unitCrop:'Énergie à ±40 µm'}
+ en:{parameters:'Parameters',core:'Experiment',lens:'Lens and media',source:'Object',display:'Display options',gallery:'Point spread functions',galleryNote:'Paraxial plane · isolated terms use the same ±40 µm window · brightness relative to each PSF peak',wide:'Total · wide view',screenExtra:'PSF at the current screen position',unitCrop:'±40 µm energy'},
+ es:{parameters:'Parámetros',core:'Experimento',lens:'Lente y medios',source:'Objeto',display:'Opciones de visualización',gallery:'Funciones de dispersión puntual',galleryNote:'Plano paraxial · términos aislados en la misma ventana de ±40 µm · brillo relativo al máximo de cada PSF',wide:'Total · vista amplia',screenExtra:'PSF en la posición actual de la pantalla',unitCrop:'Energía en ±40 µm'},
+ fr:{parameters:'Paramètres',core:'Expérience',lens:'Lentille et milieux',source:'Objet',display:'Options d’affichage',gallery:'Fonctions d’étalement du point',galleryNote:'Plan paraxial · termes isolés dans la même fenêtre de ±40 µm · luminosité relative au maximum de chaque PSF',wide:'Totale · vue large',screenExtra:'PSF à la position actuelle de l’écran',unitCrop:'Énergie à ±40 µm'}
 };
 Object.assign(T,sections[lang]);
 root.querySelectorAll('[data-t]').forEach(el=>el.textContent=T[el.dataset.t]);
@@ -37,13 +37,41 @@ function start(){
   grid.append(label);fields[id]=control;
  }}
  function reset(){for(const id of order){const f=fields[id];if(f.type==='checkbox')f.checked=defaults[id];else f.value=id==='screen'?defaults[id].toFixed(5):defaults[id]}update()}
+ function invalid(id,on=true){
+  const f=fields[id];
+  f.closest('label').classList.toggle('lab-invalid',on);
+  if(on){f.setAttribute('aria-invalid','true');f.setAttribute('aria-describedby','error');const group=f.closest('details');if(group)group.open=true}
+  else{f.removeAttribute('aria-invalid');f.removeAttribute('aria-describedby')}
+ }
  function read(){
   const p={};
-  for(const id of order){const f=fields[id];p[id]=f.type==='checkbox'?f.checked:id==='zone'?f.value:f.value===''?NaN:Number(f.value)}
+  for(const id of order){const f=fields[id];p[id]=f.type==='checkbox'?f.checked:id==='zone'?f.value:f.value===''?NaN:Number(f.value);invalid(id,false)}
   fields.s.disabled=p.far;fields.R1.disabled=!p.f1;fields.R2.disabled=!p.f2;
-  for(const [id,[lo,hi]] of Object.entries(bounds)){if(!fields[id].disabled&&(!Number.isFinite(p[id])||p[id]<lo||p[id]>hi||(fields[id].step==='1'&&!Number.isInteger(p[id]))))throw Error(T.invalid)}
-  const g=geometry(p);
-  if(p.a>p.edge||p.edge>=Math.min(Math.abs(g.r1),Math.abs(g.r2))||p.t+sag(g.r2,p.edge)-sag(g.r1,p.edge)<=0)throw Error(T.shape);
+  const issues=[];
+  for(const [id,[lo,hi]] of Object.entries(bounds)){
+   if(fields[id].disabled)continue;
+   const whole=fields[id].step==='1';
+   if(!Number.isFinite(p[id])||p[id]<lo||p[id]>hi||(whole&&!Number.isInteger(p[id]))){
+    invalid(id);
+    const qualifier=whole?({es:'; entero',en:'; whole number',fr:' ; entier'})[lang]:'';
+    issues.push(T[id]+': '+num(lo)+' – '+num(hi)+qualifier);
+   }
+  }
+  if(issues.length)throw new Error(T.invalid+' '+issues.join(' · '));
+  const g=geometry(p),geometryErrors=[];
+  if(p.a>p.edge){
+   invalid('a');
+   geometryErrors.push(({es:'La apertura no puede superar el radio físico.',en:'The aperture cannot exceed the physical lens radius.',fr:'L’ouverture ne peut pas dépasser le rayon de la lentille.'})[lang]);
+  }
+  const badFaces=[['R1',g.r1],['R2',g.r2]].filter(([,r])=>p.edge>=Math.abs(r));
+  if(badFaces.length){
+   invalid('edge');for(const [id] of badFaces)invalid(id);
+   geometryErrors.push(({es:'El radio físico debe ser menor que el radio de curvatura de cada cara curva.',en:'The physical lens radius must be smaller than the radius of curvature of each curved surface.',fr:'Le rayon de la lentille doit être inférieur au rayon de courbure de chaque face courbe.'})[lang]);
+  }else if(p.t+sag(g.r2,p.edge)-sag(g.r1,p.edge)<=0){
+   invalid('t');invalid('edge');
+   geometryErrors.push(({es:'Las dos caras se cruzan. Aumenta el espesor o reduce el radio físico.',en:'The surfaces intersect. Increase thickness or reduce the physical lens radius.',fr:'Les deux faces se croisent. Augmentez l’épaisseur ou réduisez le rayon de la lentille.'})[lang]);
+  }
+  if(geometryErrors.length)throw new Error(geometryErrors.join(' '));
   return {p,g};
  }
  function error(msg){const e=$('#error');e.hidden=!msg;e.textContent=msg}
@@ -55,27 +83,26 @@ function start(){
   drawRay(p,g);drawBars(g);
   if(p.detail)$('#detail').innerHTML='<table><thead><tr><th>µm</th><th>'+T.surf1+'</th><th>'+T.surf2+'</th><th>'+T.total+'</th></tr></thead><tbody>'+T.names.map((name,i)=>'<tr><th>'+name+'</th>'+[g.faces[0][i],g.faces[1][i],g.total[i]].map(v=>'<td>'+num(v)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
   const queue=[],same=new Map();
-  function panel(host,title,z,gg,{crop=false,inset=false,total=false}={}){
+  function panel(host,title,z,gg,{crop=false,total=false}={}){
     const box=document.createElement('figure'),caption=document.createElement('figcaption'),inner=document.createElement('div');
     caption.textContent=title;caption.setAttribute('data-alt','PSF · '+title+' · '+p.nm+' nm');
     if(total)box.className='lab-total';
     box.append(caption,inner);host.append(box);
     const spec=psfSpec(p,gg,z);
     if(!spec){inner.textContent=T.limits;return}
-    if(crop||inset){
+    if(crop){
       // Keep the required ±40 µm square inside the sampled field.
       const m=Math.max(spec.m,2**Math.ceil(Math.log2(1.02*80*spec.m/(spec.n*spec.dx))));
       const n=Math.max(1024,m);
       spec.dx*= (m/spec.m)*(spec.n/n);spec.m=m;spec.n=n;
     }
     if(spec.m>4096){inner.textContent=T.sample;return}
-    if(inset)spec.inset=true;
     inner.textContent=T.loading;
     const key=JSON.stringify([spec,crop]);
     if(same.has(key))same.get(key).inners.push(inner);
-    else{const item={spec,crop,inset,inners:[inner]};same.set(key,item);queue.push(item)}
+    else{const item={spec,crop,inners:[inner]};same.set(key,item);queue.push(item)}
   }
-  panel(host,T.wide,g.q,g,{total:true,inset:true});
+  panel(host,T.wide,g.q,g,{total:true});
   T.names.forEach((name,i)=>panel(host,name,g.q,{...g,total:g.total.map((x,k)=>i===k?x:0)},{crop:true}));
   const away=Number.isFinite(g.q)&&Math.abs(g.q-p.screen)>=.001;
   if(away){screenResult.hidden=false;if(screenResult.open)panel(screenHost,T.screenPsf,p.screen,g)}
@@ -93,13 +120,7 @@ function start(){
     if(seq!==job)return;
     for(const inner of active.inners){
       if(!e.data){inner.textContent=T.failed;continue}
-      if(active.inset){
-        const a=document.createElement('div'),b=document.createElement('div'),title=document.createElement('span');
-        inner.className='lab-total-pair';title.className='lab-inset-label';title.textContent=T.inset;
-        inner.replaceChildren(a,b);b.append(title);
-        paintPsf(a,e.data,inner.previousElementSibling.dataset.alt,false);
-        paintPsf(b,e.data.inset,'PSF · '+T.inset+' · '+p.nm+' nm',true);
-      }else paintPsf(inner,e.data,inner.previousElementSibling.dataset.alt,active.crop);
+      paintPsf(inner,e.data,inner.previousElementSibling.dataset.alt,active.crop);
     }
     next();
    };
