@@ -5,7 +5,8 @@ es:{lab:'Laboratorio virtual de óptica',collection:'Catálogo de simuladores',i
 fr:{lab:'Laboratoire virtuel d’optique',collection:'Catalogue de simulateurs',intro:'Explorez la formation des images par les systèmes optiques à travers des expériences interactives.',basic:'Simulateur de base',seidel:'Aberrations de Seidel',desc:'Tracez des rayons à travers une lentille à deux surfaces, comparez les cinq coefficients de Seidel et observez l’image d’un point lumineux.',open:'Ouvrir le simulateur',back:'← Tous les simulateurs',focus:'Placer l’écran au plan paraxial',reset:'Réinitialiser',raytitle:'Tracé des rayons · plan méridien',bartitle:'Coefficients de Seidel · total (µm)',note:'La PSF repose sur une pupille circulaire uniforme et la diffraction scalaire avec les aberrations primaires de Seidel. Les indices de réfraction ne sont pas ajustés automatiquement avec la longueur d’onde.',f1:'Forme de la face 1',f2:'Forme de la face 2',R1:'|R₁| (mm)',R2:'|R₂| (mm)',t:'Épaisseur (mm)',edge:'Rayon de la lentille (mm)',a:'Rayon d’ouverture (mm)',n1:'Indice avant la lentille',ng:'Indice de la lentille',n3:'Indice après la lentille',field:'Angle de champ (rad)',far:'Objet à l’infini',s:'Distance de l’objet (mm)',screen:'Écran depuis la face 2 (mm)',zone:'Afficher les rayons',rays:'Nombre de rayons',nm:'Longueur d’onde (nm)',crop:'Comparer à ±40 µm',detail:'Voir la contribution des faces',pos:'Rayon positif',plane:'Plane',neg:'Rayon négatif',all:'Toute l’ouverture',center:'Centraux',edgezone:'Marginaux',height:'Hauteur (mm)',distance:'Distance depuis la face 1 (mm)',screenLegend:'Écran',names:['Sphérique','Coma','Astigmatisme','Petzval','Distorsion'],surf1:'Face 1',surf2:'Face 2',total:'Total',para:'Plan paraxial',screenPsf:'Plan de l’écran',both:'Écran dans le plan paraxial',loading:'Calcul en cours…',limits:'Ce plan dépasse le domaine de l’approximation paraxiale de la pupille de sortie.',sample:'La phase nécessite plus d’échantillons. Réduisez l’ouverture ou rapprochez l’écran du plan paraxial.',failed:'Impossible de calculer la PSF avec ces paramètres.',energy:'Énergie dans le carré de ±40 µm',invalid:'Saisissez des valeurs numériques valides dans les plages indiquées.',shape:'L’ouverture doit être comprise dans la lentille et les faces ne doivent pas se croiser.',noFocus:'Il n’y a pas d’image paraxiale réelle dans la plage de l’écran.'}
 };
 const $=x=>document.querySelector(x), param=new URLSearchParams(location.search);
-const lang=Object.hasOwn(D,param.get('lang'))?param.get('lang'):'en',T=D[lang];
+const pathLang=location.pathname.split('/').filter(Boolean).at(-1);
+const lang=Object.hasOwn(D,param.get('lang'))?param.get('lang'):Object.hasOwn(D,pathLang)?pathLang:'en',T=D[lang];
 const entries=[{id:'seidel-basic',title:'seidel',description:'desc',level:'basic'}];
 const selected=entries.find(x=>x.id===param.get('sim'));
 const href=id=>'?lang='+lang+(id?'&sim='+id:'');
@@ -16,7 +17,6 @@ $('#home').href=lang==='en'?'/':'/'+lang+'/';
 $('.back').href=href();
 document.title=(selected?T.seidel+' | ':'')+T.lab+' | Kebin Contreras';
 for(const e of entries){const a=document.createElement('article');a.className='card';a.innerHTML='<p class="eyebrow">'+T[e.level]+'</p><h2>'+T[e.title]+'</h2><p>'+T[e.description]+'</p><a href="'+href(e.id)+'">'+T.open+' →</a>';$('#cards').append(a)}
-if(selected){$('#catalog').hidden=true;$('#simulator').hidden=false;start()}
 function start(){
  const bounds={R1:[1,500,.01],R2:[1,500,.01],t:[.1,40,.01],edge:[.1,25,.1],a:[.1,25,.1],n1:[1,2.5,.00001],ng:[1,2.5,.00001],n3:[1,2.5,.00001],s:[1,10000,1],field:[-.2,.2,.001],screen:[.1,1000,.001],rays:[3,41,1],nm:[400,700,1]};
  const opts={f1:[[1,'pos'],[0,'plane'],[-1,'neg']],f2:[[1,'pos'],[0,'plane'],[-1,'neg']],zone:[['all','all'],['center','center'],['edge','edgezone']]};
@@ -56,7 +56,7 @@ function start(){
     if(!spec)inner.textContent=T.limits;else if(spec.m>4096)inner.textContent=T.sample;else{inner.textContent=T.loading;queue.push([spec,inner])}
   }
   function next(){if(seq!==job||!queue.length)return;const [spec,inner]=queue.shift();
-   try{worker=new Worker('./diffraction.js',{type:'module'});
+   try{worker=new Worker(new URL('./diffraction.js',import.meta.url),{type:'module'});
     function done(data){if(seq!==job)return;worker.terminate();worker=null;if(data)paintPsf(inner,data,p);else inner.textContent=T.failed;next()}
     worker.onmessage=e=>done(e.data);worker.onerror=()=>done(null);worker.postMessage({spec,crop:p.crop});
    }catch{inner.textContent=T.failed;next()}
@@ -121,3 +121,5 @@ function paintPsf(inner,b,p){
  inner.replaceChildren(c,axis);
  if(p.crop&&b.energy!==null){const line=document.createElement('p');line.textContent=T.energy+': '+num(100*b.energy)+' %';inner.append(line)}
 }
+
+if(selected){$('#catalog').hidden=true;$('#simulator').hidden=false;start()}

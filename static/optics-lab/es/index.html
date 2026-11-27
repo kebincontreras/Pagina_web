@@ -1,0 +1,24 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Interactive simulations for geometrical and wave optics"><title>Virtual Optics Lab | Kebin Contreras</title><link rel="stylesheet" href="/optics-lab/lab.css"></head>
+<body>
+<header><div class="wrap head"><a id="home" href="/">Kebin Contreras</a><nav aria-label="Language"><a href="?lang=en" lang="en">EN</a><a href="?lang=es" lang="es">ES</a><a href="?lang=fr" lang="fr">FR</a></nav></div></header>
+<main class="wrap">
+ <section id="catalog">
+ <div class="hero"><p class="eyebrow" data-t="collection"></p><h1 data-t="lab"></h1><p class="lede" data-t="intro"></p></div>
+ <div class="catalog-grid" id="cards"></div>
+ </section>
+ <section id="simulator" hidden>
+ <a class="back" href="./" data-t="back"></a>
+ <div class="hero compact"><p class="eyebrow" data-t="basic"></p><h1 data-t="seidel"></h1><p class="lede" data-t="desc"></p></div>
+ <form id="controls" novalidate></form>
+ <div class="actions"><button id="focus" type="button" data-t="focus"></button><button id="reset" class="secondary" type="button" data-t="reset"></button></div>
+ <p id="error" role="alert" hidden></p>
+ <div class="plots"><figure><figcaption data-t="raytitle"></figcaption><svg id="rayplot" viewBox="0 0 610 340" role="img"></svg></figure>
+ <figure><figcaption data-t="bartitle"></figcaption><svg id="bars" viewBox="0 0 445 300" role="img"></svg></figure></div>
+ <div id="detail"></div>
+ <div id="psfs" class="plots" aria-live="polite"></div>
+ <p class="note" data-t="note"></p>
+ </section>
+</main>
+<footer class="wrap">Kebin Contreras · <span data-t="lab"></span></footer>
+<script type="module" src="/optics-lab/lab.js?v=2"></script>
+</body></html>
