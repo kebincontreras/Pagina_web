@@ -33,6 +33,11 @@
     url = "https://calendar.app.google/wWgTUmR3gFz7iKP86"
     weight = 55
 
+  [[es.menu.main]]
+    name = "Laboratorio virtual de óptica"
+    url = "/optics-lab/?lang=es"
+    weight = 45
+
 [fr]
   languageCode = "fr"
   languageName = "Français"
@@ -58,6 +63,11 @@
     name = "Rendez-vous"
     url = "https://calendar.app.google/wWgTUmR3gFz7iKP86"
     weight = 55
+
+  [[fr.menu.main]]
+    name = "Laboratoire virtuel d’optique"
+    url = "/optics-lab/?lang=fr"
+    weight = 45
 
 # Uncomment the lines below to configure your website in a second language.
 #[zh]

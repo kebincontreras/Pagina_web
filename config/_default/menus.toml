@@ -34,3 +34,8 @@
 #    name = "CV"
 #    url = "files/cv.pdf"
 #    weight = 70
+
+[[main]]
+  name = "Virtual Optics Lab"
+  url = "/optics-lab/?lang=en"
+  weight = 45
