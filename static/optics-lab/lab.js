@@ -10,9 +10,9 @@ const entries=[{id:'seidel-basic',title:'seidel',description:'desc',level:'basic
 const selected=entries.find(x=>x.id===param.get('sim'));
 const href=id=>id?'?sim='+id:location.pathname;
 const sections={
- en:{parameters:'Parameters',core:'Experiment',lens:'Lens and media',source:'Object',display:'Display options',gallery:'Point spread functions',galleryNote:'Paraxial plane · isolated terms use the same ±40 µm window · brightness relative to each PSF peak',wide:'Total · wide view',paraxialScreen:'Paraxial image plane',noRealImage:'No real paraxial image plane beyond the lens. Rays are shown without a screen.',unitCrop:'±40 µm energy'},
- es:{parameters:'Parámetros',core:'Experimento',lens:'Lente y medios',source:'Objeto',display:'Opciones de visualización',gallery:'Funciones de dispersión puntual',galleryNote:'Plano paraxial · términos aislados en la misma ventana de ±40 µm · brillo relativo al máximo de cada PSF',wide:'Total · vista amplia',paraxialScreen:'Plano imagen paraxial',noRealImage:'No hay un plano imagen paraxial real después de la lente. Se muestran los rayos sin pantalla.',unitCrop:'Energía en ±40 µm'},
- fr:{parameters:'Paramètres',core:'Expérience',lens:'Lentille et milieux',source:'Objet',display:'Options d’affichage',gallery:'Fonctions d’étalement du point',galleryNote:'Plan paraxial · termes isolés dans la même fenêtre de ±40 µm · luminosité relative au maximum de chaque PSF',wide:'Totale · vue large',paraxialScreen:'Plan image paraxial',noRealImage:'Aucun plan image paraxial réel après la lentille. Les rayons sont affichés sans écran.',unitCrop:'Énergie à ±40 µm'}
+ en:{parameters:'Parameters',comaExample:'Coma example',core:'Experiment',lens:'Lens and media',source:'Object',display:'Display options',gallery:'Point spread functions',galleryNote:'Paraxial plane · isolated terms use the same ±40 µm window · brightness relative to each PSF peak',wide:'Total · wide view',paraxialScreen:'Paraxial image plane',noRealImage:'No real paraxial image plane beyond the lens. Rays are shown without a screen.',unitCrop:'±40 µm energy'},
+ es:{parameters:'Parámetros',comaExample:'Ejemplo de coma',core:'Experimento',lens:'Lente y medios',source:'Objeto',display:'Opciones de visualización',gallery:'Funciones de dispersión puntual',galleryNote:'Plano paraxial · términos aislados en la misma ventana de ±40 µm · brillo relativo al máximo de cada PSF',wide:'Total · vista amplia',paraxialScreen:'Plano imagen paraxial',noRealImage:'No hay un plano imagen paraxial real después de la lente. Se muestran los rayos sin pantalla.',unitCrop:'Energía en ±40 µm'},
+ fr:{parameters:'Paramètres',comaExample:'Exemple de coma',core:'Expérience',lens:'Lentille et milieux',source:'Objet',display:'Options d’affichage',gallery:'Fonctions d’étalement du point',galleryNote:'Plan paraxial · termes isolés dans la même fenêtre de ±40 µm · luminosité relative au maximum de chaque PSF',wide:'Totale · vue large',paraxialScreen:'Plan image paraxial',noRealImage:'Aucun plan image paraxial réel après la lentille. Les rayons sont affichés sans écran.',unitCrop:'Énergie à ±40 µm'}
 };
 Object.assign(T,sections[lang]);
 root.querySelectorAll('[data-t]').forEach(el=>el.textContent=T[el.dataset.t]);
@@ -24,7 +24,7 @@ function start(){
  const opts={f1:[[1,'pos'],[0,'plane'],[-1,'neg']],f2:[[1,'pos'],[0,'plane'],[-1,'neg']],zone:[['all','all'],['center','center'],['edge','edgezone']]};
  const groups={core:['a','nm','field'],lens:['f1','R1','f2','R2','t','edge','n1','ng','n3'],source:['far','s'],display:['zone','rays','detail']};
  const order=Object.values(groups).flat();
- const form=$('#controls'), fields={};let worker=null,job=0;
+ const form=$('#controls'), preset=$('#coma-example'), fields={};let worker=null,job=0;
  for (const [key,ids] of Object.entries(groups)){
   const block=document.createElement(key==='core'?'section':'details'),heading=document.createElement(key==='core'?'h2':'summary'),grid=document.createElement('div');
   block.className='lab-group';heading.textContent=T[key];grid.className='lab-fields';block.append(heading,grid);form.append(block);
@@ -36,7 +36,15 @@ function start(){
   label.append(T[id]);if(control.type!=='checkbox')label.append(control);
   grid.append(label);fields[id]=control;
  }}
- function reset(){for(const id of order){const f=fields[id];if(f.type==='checkbox')f.checked=defaults[id];else f.value=defaults[id]}update()}
+ function loadValues(values){
+  for(const id of order){
+   const f=fields[id];
+   if(f.type==='checkbox')f.checked=values[id];else f.value=values[id];
+  }
+  update();
+ }
+ function reset(){preset.checked=false;loadValues(defaults)}
+ preset.addEventListener('change',()=>loadValues(preset.checked?{...defaults,a:3,field:.16,far:false,s:60}:defaults));
  function invalid(id,on=true){
   const f=fields[id];
   f.closest('label').classList.toggle('lab-invalid',on);
