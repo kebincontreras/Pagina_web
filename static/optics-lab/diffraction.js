@@ -74,7 +74,10 @@ export function gallery(specs,manual=null){
    return cache.get(key);
  }
  let grids=specs.map(spec=>get(manual&&spec?needed(spec,manual):spec));
- let edge=manual??rounded(1.08*Math.max(1,...grids.filter(Boolean).map(g=>g.r95)));
+ // The first panel is the combined PSF; only the five isolated terms set the scale.
+ let reference=-1;
+ for(let i=1;i<grids.length;i++)if(grids[i]&&(reference<0||grids[i].r95>grids[reference].r95))reference=i;
+ let edge=manual??rounded(1.08*(reference>0?grids[reference].r95:grids[0]?.r95??1));
  if(!manual){
   // Keep every sampled domain large enough to cover the shared axes.
   let upgraded=new Map();
@@ -89,7 +92,7 @@ export function gallery(specs,manual=null){
  const clipped=edge>available;
  if(clipped)edge=available;
  const images=grids.map(g=>g?sample(g,edge):null);
- return {edge,clipped,images};
+ return {edge,clipped,images,reference};
 }
 if(typeof self!=='undefined'&&typeof document==='undefined')self.onmessage=({data})=>{
  try{const out=gallery(data.specs,data.manual);self.postMessage(out,out.images.filter(Boolean).map(im=>im.pixels.buffer))}

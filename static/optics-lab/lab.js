@@ -10,9 +10,9 @@ const entries=[{id:'seidel-basic',title:'seidel',description:'desc',level:'basic
 const selected=entries.find(x=>x.id===param.get('sim'));
 const href=id=>id?'?sim='+id:location.pathname;
 const sections={
- en:{parameters:'Parameters',examples:'Example',normal:'Normal',core:'Experiment',lens:'Lens and media',source:'Object',display:'Display options',gallery:'Point spread functions',galleryNote:'Paraxial plane · shared axes · brightness relative to each PSF peak',wide:'Total',manual:'Manual scale',range:'Half-width (µm)',auto:'Automatic · 95% energy target',fixed:'Fixed scale',limited:'Limited by numerical sampling',badRange:'Enter a positive range.',paraxialScreen:'Paraxial image plane',noRealImage:'No real paraxial image plane beyond the lens. Rays are shown without a screen.',unitCrop:'Energy in window'},
- es:{parameters:'Parámetros',examples:'Ejemplo',normal:'Normal',core:'Experimento',lens:'Lente y medios',source:'Objeto',display:'Opciones de visualización',gallery:'Funciones de dispersión puntual',galleryNote:'Plano paraxial · ejes comunes · brillo relativo al máximo de cada PSF',wide:'Total',manual:'Escala manual',range:'Semiancho (µm)',auto:'Automática · objetivo del 95 % de energía',fixed:'Escala fija',limited:'Limitada por el muestreo numérico',badRange:'Introduce un rango positivo.',paraxialScreen:'Plano imagen paraxial',noRealImage:'No hay un plano imagen paraxial real después de la lente. Se muestran los rayos sin pantalla.',unitCrop:'Energía en la ventana'},
- fr:{parameters:'Paramètres',examples:'Exemple',normal:'Normal',core:'Expérience',lens:'Lentille et milieux',source:'Objet',display:'Options d’affichage',gallery:'Fonctions d’étalement du point',galleryNote:'Plan paraxial · axes communs · luminosité relative au maximum de chaque PSF',wide:'Totale',manual:'Échelle manuelle',range:'Demi-largeur (µm)',auto:'Automatique · cible de 95 % d’énergie',fixed:'Échelle fixe',limited:'Limitée par l’échantillonnage numérique',badRange:'Saisissez une plage positive.',paraxialScreen:'Plan image paraxial',noRealImage:'Aucun plan image paraxial réel après la lentille. Les rayons sont affichés sans écran.',unitCrop:'Énergie dans la fenêtre'}
+ en:{parameters:'Parameters',examples:'Example',normal:'Normal',core:'Experiment',lens:'Lens and media',source:'Object',display:'Display options',gallery:'Point spread functions',galleryNote:'Paraxial plane · shared axes · brightness relative to each PSF peak',wide:'Total',manual:'Manual scale',range:'Half-width (µm)',auto:'Automatic · 95% energy target',reference:'Scale reference',fixed:'Fixed scale',limited:'Limited by numerical sampling',badRange:'Enter a positive range.',paraxialScreen:'Paraxial image plane',noRealImage:'No real paraxial image plane beyond the lens. Rays are shown without a screen.',unitCrop:'Energy in window'},
+ es:{parameters:'Parámetros',examples:'Ejemplo',normal:'Normal',core:'Experimento',lens:'Lente y medios',source:'Objeto',display:'Opciones de visualización',gallery:'Funciones de dispersión puntual',galleryNote:'Plano paraxial · ejes comunes · brillo relativo al máximo de cada PSF',wide:'Total',manual:'Escala manual',range:'Semiancho (µm)',auto:'Automática · objetivo del 95 % de energía',reference:'Referencia de escala',fixed:'Escala fija',limited:'Limitada por el muestreo numérico',badRange:'Introduce un rango positivo.',paraxialScreen:'Plano imagen paraxial',noRealImage:'No hay un plano imagen paraxial real después de la lente. Se muestran los rayos sin pantalla.',unitCrop:'Energía en la ventana'},
+ fr:{parameters:'Paramètres',examples:'Exemple',normal:'Normal',core:'Expérience',lens:'Lentille et milieux',source:'Objet',display:'Options d’affichage',gallery:'Fonctions d’étalement du point',galleryNote:'Plan paraxial · axes communs · luminosité relative au maximum de chaque PSF',wide:'Totale',manual:'Échelle manuelle',range:'Demi-largeur (µm)',auto:'Automatique · cible de 95 % d’énergie',reference:'Référence de l’échelle',fixed:'Échelle fixe',limited:'Limitée par l’échantillonnage numérique',badRange:'Saisissez une plage positive.',paraxialScreen:'Plan image paraxial',noRealImage:'Aucun plan image paraxial réel après la lentille. Les rayons sont affichés sans écran.',unitCrop:'Énergie dans la fenêtre'}
 };
 const exampleValues=[
  {}, {a:8}, {a:3,field:.16,far:false,s:60}, {a:4,field:.2},
@@ -126,12 +126,12 @@ function start(){
    if(worker){worker.terminate();worker=null}
    if(!data){holders.forEach((inner,i)=>{if(specs[i])inner.textContent=T.failed});return}
    lastEdge=data.edge;
-   status.textContent=(fixed===null?T.auto:T.fixed)+' · ±'+num(data.edge)+' µm'+(data.clipped?' · '+T.limited:'');
+   status.textContent=(fixed===null?T.auto:T.fixed)+' · ±'+num(data.edge)+' µm'+(fixed===null&&data.reference>0?' · '+T.reference+': '+T.names[data.reference-1]:'')+(data.clipped?' · '+T.limited:'');
    if(data.clipped&&fixed!==null){range.setAttribute('aria-invalid','true');range.closest('label').classList.add('lab-invalid')}
    data.images.forEach((im,i)=>{if(im)paintPsf(holders[i],im,holders[i].previousElementSibling.dataset.alt,true)});
   }
   try{
-   worker=new Worker(new URL('./diffraction.js?v=9',import.meta.url),{type:'module'});
+   worker=new Worker(new URL('./diffraction.js?v=10',import.meta.url),{type:'module'});
    worker.onmessage=e=>done(e.data);worker.onerror=()=>done(null);
    worker.postMessage({specs,manual:fixed});
   }catch{done(null)}
