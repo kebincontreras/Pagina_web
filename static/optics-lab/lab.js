@@ -10,9 +10,9 @@ const entries=[{id:'seidel-basic',title:'seidel',description:'desc',level:'basic
 const selected=entries.find(x=>x.id===param.get('sim'));
 const href=id=>id?'?sim='+id:location.pathname;
 const sections={
- en:{parameters:'Parameters',core:'Experiment',lens:'Lens and media',source:'Object and field',display:'Display options',isolate:'PSF comparison',allTerms:'System PSF',isolated:'Isolated',totalPsf:'Total at the paraxial plane'},
- es:{parameters:'Parámetros',core:'Experimento',lens:'Lente y medios',source:'Objeto y campo',display:'Opciones de visualización',isolate:'Comparación de PSF',allTerms:'PSF del sistema',isolated:'Aislada',totalPsf:'Total en el plano paraxial'},
- fr:{parameters:'Paramètres',core:'Expérience',lens:'Lentille et milieux',source:'Objet et champ',display:'Options d’affichage',isolate:'Comparaison des PSF',allTerms:'PSF du système',isolated:'Isolée',totalPsf:'Totale au plan paraxial'}
+ en:{parameters:'Parameters',core:'Experiment',lens:'Lens and media',source:'Object',display:'Display options',gallery:'Point spread functions',galleryNote:'Paraxial plane · isolated terms use the same ±40 µm window · brightness relative to each PSF peak',wide:'Total · wide view',inset:'Total · same scale',screenExtra:'PSF at the current screen position',unitCrop:'±40 µm energy'},
+ es:{parameters:'Parámetros',core:'Experimento',lens:'Lente y medios',source:'Objeto',display:'Opciones de visualización',gallery:'Funciones de dispersión puntual',galleryNote:'Plano paraxial · términos aislados en la misma ventana de ±40 µm · brillo relativo al máximo de cada PSF',wide:'Total · vista amplia',inset:'Total · misma escala',screenExtra:'PSF en la posición actual de la pantalla',unitCrop:'Energía en ±40 µm'},
+ fr:{parameters:'Paramètres',core:'Expérience',lens:'Lentille et milieux',source:'Objet',display:'Options d’affichage',gallery:'Fonctions d’étalement du point',galleryNote:'Plan paraxial · termes isolés dans la même fenêtre de ±40 µm · luminosité relative au maximum de chaque PSF',wide:'Totale · vue large',inset:'Totale · même échelle',screenExtra:'PSF à la position actuelle de l’écran',unitCrop:'Énergie à ±40 µm'}
 };
 Object.assign(T,sections[lang]);
 root.querySelectorAll('[data-t]').forEach(el=>el.textContent=T[el.dataset.t]);
@@ -22,11 +22,9 @@ for(const e of entries){const a=document.createElement('article');a.className='l
 function start(){
  const bounds={R1:[1,500,.01],R2:[1,500,.01],t:[.1,40,.01],edge:[.1,25,.1],a:[.1,25,.1],n1:[1,2.5,.00001],ng:[1,2.5,.00001],n3:[1,2.5,.00001],s:[1,10000,1],field:[-.2,.2,.001],screen:[.1,1000,.001],rays:[3,41,1],nm:[400,700,1]};
  const opts={f1:[[1,'pos'],[0,'plane'],[-1,'neg']],f2:[[1,'pos'],[0,'plane'],[-1,'neg']],zone:[['all','all'],['center','center'],['edge','edgezone']]};
- const groups={core:['a','screen','nm'],lens:['f1','R1','f2','R2','t','edge','n1','ng','n3'],source:['far','s','field'],display:['zone','rays','crop','detail']};
+ const groups={core:['a','screen','nm','field'],lens:['f1','R1','f2','R2','t','edge','n1','ng','n3'],source:['far','s'],display:['zone','rays','detail']};
  const order=Object.values(groups).flat();
  const form=$('#controls'), fields={};let worker=null,job=0;
- const mode=$('#psf-mode');for(const [i,name] of [T.allTerms,...T.names].entries()){const o=document.createElement('option');o.value=i-1;o.textContent=name;mode.append(o)}
- mode.addEventListener('change',update);
  for (const [key,ids] of Object.entries(groups)){
   const block=document.createElement(key==='core'?'section':'details'),heading=document.createElement(key==='core'?'h2':'summary'),grid=document.createElement('div');
   block.className='lab-group';heading.textContent=T[key];grid.className='lab-fields';block.append(heading,grid);form.append(block);
@@ -38,7 +36,7 @@ function start(){
   label.append(T[id]);if(control.type!=='checkbox')label.append(control);
   grid.append(label);fields[id]=control;
  }}
- function reset(){mode.value='-1';for(const id of order){const f=fields[id];if(f.type==='checkbox')f.checked=defaults[id];else f.value=id==='screen'?defaults[id].toFixed(5):defaults[id]}update()}
+ function reset(){for(const id of order){const f=fields[id];if(f.type==='checkbox')f.checked=defaults[id];else f.value=id==='screen'?defaults[id].toFixed(5):defaults[id]}update()}
  function read(){
   const p={};
   for(const id of order){const f=fields[id];p[id]=f.type==='checkbox'?f.checked:id==='zone'?f.value:f.value===''?NaN:Number(f.value)}
@@ -51,34 +49,69 @@ function start(){
  function error(msg){const e=$('#error');e.hidden=!msg;e.textContent=msg}
  function update(){
   job++;if(worker){worker.terminate();worker=null}const seq=job;
-  const host=$('#psfs');host.replaceChildren();$('#detail').replaceChildren();
+  const host=$('#psfs'),screenHost=$('#screen-psf'),screenResult=$('#screen-result');
+  host.replaceChildren();screenHost.replaceChildren();screenResult.hidden=true;$('#detail').replaceChildren();
   let p,g;try{({p,g}=read());error('')}catch(e){error(e.message);$('#rayplot').replaceChildren();$('#bars').replaceChildren();return}
   drawRay(p,g);drawBars(g);
   if(p.detail)$('#detail').innerHTML='<table><thead><tr><th>µm</th><th>'+T.surf1+'</th><th>'+T.surf2+'</th><th>'+T.total+'</th></tr></thead><tbody>'+T.names.map((name,i)=>'<tr><th>'+name+'</th>'+[g.faces[0][i],g.faces[1][i],g.total[i]].map(v=>'<td>'+num(v)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
-  const atFocus=Math.abs(g.q-p.screen)<.001;
-  const isolated=Number(mode.value);
-  const isoGeometry={...g,total:g.total.map((x,i)=>i===isolated?x:0)};
-  const planes=isolated>=0?[[T.totalPsf,g.q,g],[T.isolated+': '+T.names[isolated],g.q,isoGeometry]]:
-    atFocus?[[T.both,g.q,g]]:[[T.para,g.q,g],[T.screenPsf,p.screen,g]];
-  const queue=[];
-  for(const [title,z,gg] of planes){
-    const box=document.createElement('figure'),caption=document.createElement('figcaption'),inner=document.createElement('div');caption.textContent='PSF · '+title+' · '+p.nm+' nm';box.append(caption,inner);host.append(box);
+  const queue=[],same=new Map();
+  function panel(host,title,z,gg,{crop=false,inset=false,total=false}={}){
+    const box=document.createElement('figure'),caption=document.createElement('figcaption'),inner=document.createElement('div');
+    caption.textContent=title;caption.setAttribute('data-alt','PSF · '+title+' · '+p.nm+' nm');
+    if(total)box.className='lab-total';
+    box.append(caption,inner);host.append(box);
     const spec=psfSpec(p,gg,z);
-    if(!spec)inner.textContent=T.limits;else if(spec.m>4096)inner.textContent=T.sample;else{inner.textContent=T.loading;queue.push([spec,inner])}
+    if(!spec){inner.textContent=T.limits;return}
+    if(crop||inset){
+      // Keep the required ±40 µm square inside the sampled field.
+      const m=Math.max(spec.m,2**Math.ceil(Math.log2(1.02*80*spec.m/(spec.n*spec.dx))));
+      const n=Math.max(1024,m);
+      spec.dx*= (m/spec.m)*(spec.n/n);spec.m=m;spec.n=n;
+    }
+    if(spec.m>4096){inner.textContent=T.sample;return}
+    if(inset)spec.inset=true;
+    inner.textContent=T.loading;
+    const key=JSON.stringify([spec,crop]);
+    if(same.has(key))same.get(key).inners.push(inner);
+    else{const item={spec,crop,inset,inners:[inner]};same.set(key,item);queue.push(item)}
   }
-  if(isolated>=0&&!p.crop&&queue.length===2){
-    const specs=queue.map(([sp])=>sp);
-    const common=Math.min(Math.max(...specs.map(sp=>sp.view)),...specs.map(sp=>sp.n*sp.dx/2));
-    specs.forEach(sp=>sp.view=common);
-  }
-  function next(){if(seq!==job||!queue.length)return;const [spec,inner]=queue.shift();
-   try{worker=new Worker(new URL('./diffraction.js',import.meta.url),{type:'module'});
-    function done(data){if(seq!==job)return;worker.terminate();worker=null;if(data)paintPsf(inner,data,p);else inner.textContent=T.failed;next()}
-    worker.onmessage=e=>done(e.data);worker.onerror=()=>done(null);worker.postMessage({spec,crop:p.crop});
-   }catch{inner.textContent=T.failed;next()}
-  }
-  next();
+  panel(host,T.wide,g.q,g,{total:true,inset:true});
+  T.names.forEach((name,i)=>panel(host,name,g.q,{...g,total:g.total.map((x,k)=>i===k?x:0)},{crop:true}));
+  const away=Number.isFinite(g.q)&&Math.abs(g.q-p.screen)>=.001;
+  if(away){screenResult.hidden=false;if(screenResult.open)panel(screenHost,T.screenPsf,p.screen,g)}
+  if(!queue.length)return;
+  try{
+   worker=new Worker(new URL('./diffraction.js?v=4',import.meta.url),{type:'module'});
+   let active;
+   function next(){
+    if(seq!==job)return;
+    if(!queue.length){worker.terminate();worker=null;return}
+    active=queue.shift();
+    worker.postMessage({spec:active.spec,crop:active.crop});
+   }
+   worker.onmessage=e=>{
+    if(seq!==job)return;
+    for(const inner of active.inners){
+      if(!e.data){inner.textContent=T.failed;continue}
+      if(active.inset){
+        const a=document.createElement('div'),b=document.createElement('div'),title=document.createElement('span');
+        inner.className='lab-total-pair';title.className='lab-inset-label';title.textContent=T.inset;
+        inner.replaceChildren(a,b);b.append(title);
+        paintPsf(a,e.data,inner.previousElementSibling.dataset.alt,false);
+        paintPsf(b,e.data.inset,'PSF · '+T.inset+' · '+p.nm+' nm',true);
+      }else paintPsf(inner,e.data,inner.previousElementSibling.dataset.alt,active.crop);
+    }
+    next();
+   };
+   worker.onerror=()=>{
+    if(seq!==job)return;
+    for(const item of [active,...queue])if(item)for(const inner of item.inners)inner.textContent=T.failed;
+    worker.terminate();worker=null;
+   };
+   next();
+  }catch{for(const item of queue)for(const inner of item.inners)inner.textContent=T.failed}
  }
+ $('#screen-result').addEventListener('toggle',()=>{if($('#screen-result').open&&!$('#screen-result').hidden)update()});
  $('#focus').addEventListener('click',()=>{try{const {g}=read();if(!Number.isFinite(g.q)||g.q<.1||g.q>1000)throw Error(T.noFocus);fields.screen.value=g.q.toFixed(5);update()}catch(e){error(e.message)}});
  $('#reset').addEventListener('click',reset);
  form.addEventListener('change',update);form.addEventListener('submit',e=>{e.preventDefault();document.activeElement?.blur()});
@@ -126,16 +159,15 @@ function drawBars(g){
  });
  add('text',{x:X(0),y:284,'text-anchor':'middle'},'0 µm');
 }
-function paintPsf(inner,b,p){
- const c=document.createElement('canvas');c.width=c.height=b.size;c.setAttribute('role','img');c.setAttribute('aria-label',inner.previousElementSibling.textContent);
- const ctx=c.getContext('2d'),out=ctx.createImageData(b.size,b.size),nm=p.nm;
- const rgb=p.crop?[255,255,255]:nm<450?[164,106,246]:nm<495?[76,153,250]:nm<570?[69,224,145]:nm<590?[245,224,90]:nm<620?[253,174,107]:[255,106,104];
- for(let i=0;i<b.pixels.length;i++){const q=b.pixels[i]/255;for(let j=0;j<3;j++)out.data[4*i+j]=Math.round(q*rgb[j]);out.data[4*i+3]=255}
+function paintPsf(inner,b,title,crop){
+ const c=document.createElement('canvas');c.width=c.height=b.size;c.setAttribute('role','img');c.setAttribute('aria-label',title);
+ const ctx=c.getContext('2d'),out=ctx.createImageData(b.size,b.size);
+ for(let i=0;i<b.pixels.length;i++){const q=b.pixels[i];out.data[4*i]=out.data[4*i+1]=out.data[4*i+2]=q;out.data[4*i+3]=255}
  ctx.putImageData(out,0,0);
- if(!p.crop){const m=b.size/2;ctx.strokeStyle='#ffffff95';ctx.beginPath();ctx.moveTo(m-5,m);ctx.lineTo(m+5,m);ctx.moveTo(m,m-5);ctx.lineTo(m,m+5);ctx.stroke()}
  const axis=document.createElement('div');axis.className='lab-psf-axis';axis.innerHTML='<span>−'+num(b.edge)+' µm</span><span>0</span><span>+'+num(b.edge)+' µm</span>';
- inner.replaceChildren(c,axis);
- if(p.crop&&b.energy!==null){const line=document.createElement('p');line.textContent=T.energy+': '+num(100*b.energy)+' %';inner.append(line)}
+ if(inner.textContent===T.loading)inner.replaceChildren();
+ inner.append(c,axis);
+ if(crop&&b.energy!==null){const line=document.createElement('p');line.textContent=T.unitCrop+': '+num(100*b.energy)+' %';inner.append(line)}
 }
 
-if(selected){$('#catalog').hidden=true;$('#simulator').hidden=false;start()}
+if(selected){root.classList.add('lab-active');$('#catalog').hidden=true;$('#simulator').hidden=false;start()}

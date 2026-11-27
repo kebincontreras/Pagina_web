@@ -1,5 +1,5 @@
 {{ define "main" }}
-<link rel="stylesheet" href="/optics-lab/lab.css?v=3">
+<link rel="stylesheet" href="/optics-lab/lab.css?v=4">
 <main class="optics-lab container" data-lang="{{ .Language.Lang }}">
   <section id="catalog">
     <div class="lab-intro"><p class="lab-kicker" data-t="collection"></p><h1>{{ .Title }}</h1><p class="lab-lede" data-t="intro"></p></div>
@@ -15,16 +15,17 @@
         <div class="lab-actions"><button type="button" id="focus" data-t="focus"></button><button type="button" id="reset" class="lab-secondary" data-t="reset"></button></div>
         <p id="error" role="alert" hidden></p>
       </aside>
-      <div class="lab-output">
-        <figure><figcaption data-t="raytitle"></figcaption><svg id="rayplot" viewBox="0 0 610 340" role="img"></svg></figure>
-        <figure><figcaption data-t="bartitle"></figcaption><svg id="bars" viewBox="0 0 445 300" role="img"></svg></figure>
-        <div id="detail"></div>
-        <div class="lab-psf-tool"><label><span data-t="isolate"></span><select id="psf-mode"></select></label></div>
-        <div id="psfs" class="lab-psfs" aria-live="polite"></div>
-      </div>
+      <figure class="lab-rays"><figcaption data-t="raytitle"></figcaption><svg id="rayplot" viewBox="0 0 610 340" role="img"></svg></figure>
+      <figure class="lab-coeffs"><figcaption data-t="bartitle"></figcaption><svg id="bars" viewBox="0 0 445 300" role="img"></svg><div id="detail"></div></figure>
     </div>
+    <div class="lab-psf-heading"><h2 data-t="gallery"></h2><p data-t="galleryNote"></p></div>
+    <div id="psfs" class="lab-psfs" aria-live="polite"></div>
+    <details id="screen-result" class="lab-screen-result" hidden>
+      <summary data-t="screenExtra"></summary>
+      <div id="screen-psf"></div>
+    </details>
     <p class="lab-note" data-t="note"></p>
   </section>
 </main>
-<script type="module" src="/optics-lab/lab.js?v=3"></script>
+<script type="module" src="/optics-lab/lab.js?v=4"></script>
 {{ end }}

@@ -23,14 +23,21 @@ export function intensity(s,crop){
  let sum=0,peak=0,energy=0;
  for(let y=0;y<n;y++)for(let x=0;x<n;x++){const i=y*n+x,q=real[i]**2+imag[i]**2;sum+=q;peak=Math.max(peak,q);
   if(Math.min(y,n-y)*dx<=40&&Math.min(x,n-x)*dx<=40)energy+=q}
- const size=320,pixels=new Uint8Array(size*size),edge=crop?40:Math.min(s.view,n*dx/2);
- for(let y=0;y<size;y++)for(let x=0;x<size;x++){
-  const i=Math.round((x+.5-size/2)*2*edge/(size*dx)),j=Math.round((size/2-y-.5)*2*edge/(size*dx));
-  if(Math.abs(i)<n/2&&Math.abs(j)<n/2){const w=((j+n)%n)*n+((i+n)%n);pixels[y*size+x]=Math.round(255*((real[w]**2+imag[w]**2)/peak)**.55)}
+ const size=360;
+ function sample(cropped){
+  const edge=cropped?40:Math.min(s.view,n*dx/2),pixels=new Uint8Array(size*size);
+  for(let y=0;y<size;y++)for(let x=0;x<size;x++){
+   const i=Math.round((x+.5-size/2)*2*edge/(size*dx)),j=Math.round((size/2-y-.5)*2*edge/(size*dx));
+   if(Math.abs(i)<n/2&&Math.abs(j)<n/2){const w=((j+n)%n)*n+((i+n)%n);pixels[y*size+x]=Math.round(255*((real[w]**2+imag[w]**2)/peak)**.55)}
+  }
+  return {size,pixels,edge,energy:40<n*dx/2?energy/sum:null};
  }
- return {size,pixels,edge,energy:40<n*dx/2?energy/sum:null};
+ const result=sample(crop);
+ if(s.inset)result.inset=sample(true);
+ return result;
 }
+
 if(typeof self!=='undefined'&&typeof document==='undefined')self.onmessage=({data})=>{
- try{const out=intensity(data.spec,data.crop);self.postMessage(out,[out.pixels.buffer])}
+ try{const out=intensity(data.spec,data.crop);self.postMessage(out,out.inset?[out.pixels.buffer,out.inset.pixels.buffer]:[out.pixels.buffer])}
  catch{self.postMessage(null)}
 };
