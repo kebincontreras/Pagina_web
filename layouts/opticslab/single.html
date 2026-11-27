@@ -1,5 +1,5 @@
 {{ define "main" }}
-<link rel="stylesheet" href="/optics-lab/lab.css?v=6">
+<link rel="stylesheet" href="/optics-lab/lab.css?v=9">
 <main class="optics-lab container" data-lang="{{ .Language.Lang }}">
   <section id="catalog">
     <div class="lab-intro"><p class="lab-kicker" data-t="collection"></p><h1>{{ .Title }}</h1><p class="lab-lede" data-t="intro"></p></div>
@@ -11,7 +11,7 @@
     <div class="lab-workspace">
       <aside class="lab-panel">
         <p class="lab-panel-title" data-t="parameters"></p>
-        <label class="check lab-preset"><input id="coma-example" type="checkbox"><span data-t="comaExample"></span></label>
+        <label class="lab-examples"><span data-t="examples"></span><select id="lab-example"></select></label>
         <form id="controls" novalidate></form>
         <div class="lab-actions"><button type="button" id="reset" class="lab-secondary" data-t="reset"></button></div>
         <p id="error" role="alert" hidden></p>
@@ -22,11 +22,12 @@
           <figure class="lab-coeffs"><figcaption data-t="bartitle"></figcaption><svg id="bars" viewBox="0 0 445 300" role="img"></svg><div id="detail"></div></figure>
         </div>
         <div class="lab-psf-heading"><h2 data-t="gallery"></h2><p data-t="galleryNote"></p></div>
+        <div class="lab-range"><label class="check"><input id="lab-manual" type="checkbox"><span data-t="manual"></span></label><label class="lab-manual-value" hidden><span data-t="range"></span><input id="lab-range-value" type="number" min="0.1" step="any" value="40" inputmode="decimal"></label><span id="lab-range-status" aria-live="polite"></span></div>
         <div id="psfs" class="lab-psfs" aria-live="polite"></div>
       </div>
     </div>
     <p class="lab-note" data-t="note"></p>
   </section>
 </main>
-<script type="module" src="/optics-lab/lab.js?v=8"></script>
+<script type="module" src="/optics-lab/lab.js?v=9"></script>
 {{ end }}

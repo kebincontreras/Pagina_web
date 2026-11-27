@@ -59,3 +59,11 @@
 .optics-lab input[aria-invalid=true],.optics-lab select[aria-invalid=true]{border-color:#b42334;box-shadow:0 0 0 1px #b42334}
 .dark .optics-lab label.lab-invalid,.dark .optics-lab #error{color:#ff9da5}
 .dark .optics-lab input[aria-invalid=true],.dark .optics-lab select[aria-invalid=true]{border-color:#ff9da5;box-shadow:0 0 0 1px #ff9da5}
+
+.optics-lab .lab-examples{margin:0 0 .5rem;max-width:100%}
+.optics-lab .lab-range{display:flex;align-items:center;gap:.35rem .75rem;flex-wrap:wrap;margin:0 0 .4rem;color:var(--lab-muted);font-size:.72rem}
+.optics-lab .lab-range label{font-size:.72rem}
+.optics-lab .lab-range .lab-manual-value{flex-direction:row;align-items:center;gap:.4rem}
+.optics-lab .lab-manual-value input{width:5.4rem}
+.optics-lab .lab-psfs .lab-total canvas{max-width:185px}
+.optics-lab .lab-psfs .lab-total .lab-psf-axis{max-width:185px}

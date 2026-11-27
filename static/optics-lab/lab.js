@@ -10,10 +10,15 @@ const entries=[{id:'seidel-basic',title:'seidel',description:'desc',level:'basic
 const selected=entries.find(x=>x.id===param.get('sim'));
 const href=id=>id?'?sim='+id:location.pathname;
 const sections={
- en:{parameters:'Parameters',comaExample:'Coma example',core:'Experiment',lens:'Lens and media',source:'Object',display:'Display options',gallery:'Point spread functions',galleryNote:'Paraxial plane · isolated terms use the same ±40 µm window · brightness relative to each PSF peak',wide:'Total · wide view',paraxialScreen:'Paraxial image plane',noRealImage:'No real paraxial image plane beyond the lens. Rays are shown without a screen.',unitCrop:'±40 µm energy'},
- es:{parameters:'Parámetros',comaExample:'Ejemplo de coma',core:'Experimento',lens:'Lente y medios',source:'Objeto',display:'Opciones de visualización',gallery:'Funciones de dispersión puntual',galleryNote:'Plano paraxial · términos aislados en la misma ventana de ±40 µm · brillo relativo al máximo de cada PSF',wide:'Total · vista amplia',paraxialScreen:'Plano imagen paraxial',noRealImage:'No hay un plano imagen paraxial real después de la lente. Se muestran los rayos sin pantalla.',unitCrop:'Energía en ±40 µm'},
- fr:{parameters:'Paramètres',comaExample:'Exemple de coma',core:'Expérience',lens:'Lentille et milieux',source:'Objet',display:'Options d’affichage',gallery:'Fonctions d’étalement du point',galleryNote:'Plan paraxial · termes isolés dans la même fenêtre de ±40 µm · luminosité relative au maximum de chaque PSF',wide:'Totale · vue large',paraxialScreen:'Plan image paraxial',noRealImage:'Aucun plan image paraxial réel après la lentille. Les rayons sont affichés sans écran.',unitCrop:'Énergie à ±40 µm'}
+ en:{parameters:'Parameters',examples:'Example',normal:'Normal',core:'Experiment',lens:'Lens and media',source:'Object',display:'Display options',gallery:'Point spread functions',galleryNote:'Paraxial plane · shared axes · brightness relative to each PSF peak',wide:'Total',manual:'Manual scale',range:'Half-width (µm)',auto:'Automatic · 95% energy target',fixed:'Fixed scale',limited:'Limited by numerical sampling',badRange:'Enter a positive range.',paraxialScreen:'Paraxial image plane',noRealImage:'No real paraxial image plane beyond the lens. Rays are shown without a screen.',unitCrop:'Energy in window'},
+ es:{parameters:'Parámetros',examples:'Ejemplo',normal:'Normal',core:'Experimento',lens:'Lente y medios',source:'Objeto',display:'Opciones de visualización',gallery:'Funciones de dispersión puntual',galleryNote:'Plano paraxial · ejes comunes · brillo relativo al máximo de cada PSF',wide:'Total',manual:'Escala manual',range:'Semiancho (µm)',auto:'Automática · objetivo del 95 % de energía',fixed:'Escala fija',limited:'Limitada por el muestreo numérico',badRange:'Introduce un rango positivo.',paraxialScreen:'Plano imagen paraxial',noRealImage:'No hay un plano imagen paraxial real después de la lente. Se muestran los rayos sin pantalla.',unitCrop:'Energía en la ventana'},
+ fr:{parameters:'Paramètres',examples:'Exemple',normal:'Normal',core:'Expérience',lens:'Lentille et milieux',source:'Objet',display:'Options d’affichage',gallery:'Fonctions d’étalement du point',galleryNote:'Plan paraxial · axes communs · luminosité relative au maximum de chaque PSF',wide:'Totale',manual:'Échelle manuelle',range:'Demi-largeur (µm)',auto:'Automatique · cible de 95 % d’énergie',fixed:'Échelle fixe',limited:'Limitée par l’échantillonnage numérique',badRange:'Saisissez une plage positive.',paraxialScreen:'Plan image paraxial',noRealImage:'Aucun plan image paraxial réel après la lentille. Les rayons sont affichés sans écran.',unitCrop:'Énergie dans la fenêtre'}
 };
+const exampleValues=[
+ {}, {a:8}, {a:3,field:.16,far:false,s:60}, {a:4,field:.2},
+ {f1:1,R1:15,f2:-1,R2:40,edge:6,t:12,a:2,field:.15},
+ {f1:0,f2:-1,R2:25.84,a:1,field:.2}
+];
 Object.assign(T,sections[lang]);
 root.querySelectorAll('[data-t]').forEach(el=>el.textContent=T[el.dataset.t]);
 $('.lab-back').href=href();
@@ -24,7 +29,13 @@ function start(){
  const opts={f1:[[1,'pos'],[0,'plane'],[-1,'neg']],f2:[[1,'pos'],[0,'plane'],[-1,'neg']],zone:[['all','all'],['center','center'],['edge','edgezone']]};
  const groups={core:['a','nm','field'],lens:['f1','R1','f2','R2','t','edge','n1','ng','n3'],source:['far','s'],display:['zone','rays','detail']};
  const order=Object.values(groups).flat();
- const form=$('#controls'), preset=$('#coma-example'), fields={};let worker=null,job=0;
+ const form=$('#controls'),preset=$('#lab-example'),manual=$('#lab-manual'),range=$('#lab-range-value'),status=$('#lab-range-status'),fields={};let worker=null,job=0,lastEdge=40;
+ for(const [i,name] of [T.normal,...T.names].entries()){
+   const o=document.createElement('option');o.value=i;o.textContent=name;preset.append(o);
+ }
+ manual.addEventListener('change',()=>{range.closest('label').hidden=!manual.checked;if(manual.checked)range.value=Number(lastEdge.toPrecision(6));update()});
+ range.addEventListener('change',update);
+ range.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();update()}});
  for (const [key,ids] of Object.entries(groups)){
   const block=document.createElement(key==='core'?'section':'details'),heading=document.createElement(key==='core'?'h2':'summary'),grid=document.createElement('div');
   block.className='lab-group';heading.textContent=T[key];grid.className='lab-fields';block.append(heading,grid);form.append(block);
@@ -43,8 +54,8 @@ function start(){
   }
   update();
  }
- function reset(){preset.checked=false;loadValues(defaults)}
- preset.addEventListener('change',()=>loadValues(preset.checked?{...defaults,a:3,field:.16,far:false,s:60}:defaults));
+ function reset(){preset.value='0';manual.checked=false;range.closest('label').hidden=true;range.value='40';loadValues(defaults)}
+ preset.addEventListener('change',()=>loadValues({...defaults,...exampleValues[Number(preset.value)]}));
  function invalid(id,on=true){
   const f=fields[id];
   f.closest('label').classList.toggle('lab-invalid',on);
@@ -86,60 +97,44 @@ function start(){
  function update(){
   job++;if(worker){worker.terminate();worker=null}const seq=job;
   const host=$('#psfs');
-  host.replaceChildren();$('#detail').replaceChildren();
+  host.replaceChildren();$('#detail').replaceChildren();status.textContent='';range.removeAttribute('aria-invalid');range.closest('label').classList.remove('lab-invalid');
   let p,g;try{({p,g}=read());error('')}catch(e){error(e.message);$('#rayplot').replaceChildren();$('#bars').replaceChildren();return}
   const physicalScreen=Number.isFinite(g.q)&&g.q>Math.max(0,sag(g.r2,p.edge));
   p.screen=physicalScreen?g.q:Math.max(0,sag(g.r2,p.edge))+Math.max(12,2*p.edge);
   drawRay(p,g,physicalScreen);drawBars(g);
   if(p.detail)$('#detail').innerHTML='<table><thead><tr><th>µm</th><th>'+T.surf1+'</th><th>'+T.surf2+'</th><th>'+T.total+'</th></tr></thead><tbody>'+T.names.map((name,i)=>'<tr><th>'+name+'</th>'+[g.faces[0][i],g.faces[1][i],g.total[i]].map(v=>'<td>'+num(v)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
-  const queue=[],same=new Map();
-  function panel(host,title,z,gg,{crop=false,total=false}={}){
-    const box=document.createElement('figure'),caption=document.createElement('figcaption'),inner=document.createElement('div');
-    caption.textContent=title;caption.setAttribute('data-alt','PSF · '+title+' · '+p.nm+' nm');
-    if(total)box.className='lab-total';
-    box.append(caption,inner);host.append(box);
-    const spec=psfSpec(p,gg,z);
-    if(!spec){inner.textContent=T.limits;return}
-    if(crop){
-      // Keep the required ±40 µm square inside the sampled field.
-      const m=Math.max(spec.m,2**Math.ceil(Math.log2(1.02*80*spec.m/(spec.n*spec.dx))));
-      const n=Math.max(1024,m);
-      spec.dx*= (m/spec.m)*(spec.n/n);spec.m=m;spec.n=n;
-    }
-    if(spec.m>4096){inner.textContent=T.sample;return}
-    inner.textContent=T.loading;
-    const key=JSON.stringify([spec,crop]);
-    if(same.has(key))same.get(key).inners.push(inner);
-    else{const item={spec,crop,inners:[inner]};same.set(key,item);queue.push(item)}
+  const specs=[],holders=[];
+  function panel(title,gg,total=false){
+   const box=document.createElement('figure'),caption=document.createElement('figcaption'),inner=document.createElement('div');
+   caption.textContent=title;caption.setAttribute('data-alt','PSF · '+title+' · '+p.nm+' nm');
+   if(total)box.className='lab-total';
+   box.append(caption,inner);host.append(box);
+   const spec=psfSpec(p,gg,g.q);
+   inner.textContent=!spec?T.limits:spec.m>4096?T.sample:T.loading;
+   specs.push(spec&&spec.m<=4096?spec:null);holders.push(inner);
   }
   if(!physicalScreen){host.textContent=T.noRealImage;return}
-  panel(host,T.wide,g.q,g,{total:true});
-  T.names.forEach((name,i)=>panel(host,name,g.q,{...g,total:g.total.map((x,k)=>i===k?x:0)},{crop:true}));
-  if(!queue.length)return;
+  const fixed=manual.checked?Number(range.value):null;
+  if(fixed!==null&&(!Number.isFinite(fixed)||fixed<.1)){
+   status.textContent=T.badRange;range.setAttribute('aria-invalid','true');range.closest('label').classList.add('lab-invalid');return;
+  }
+  panel(T.wide,g,true);
+  T.names.forEach((name,i)=>panel(name,{...g,total:g.total.map((x,k)=>i===k?x:0)}));
+  if(!specs.some(Boolean))return;
+  function done(data){
+   if(seq!==job)return;
+   if(worker){worker.terminate();worker=null}
+   if(!data){holders.forEach((inner,i)=>{if(specs[i])inner.textContent=T.failed});return}
+   lastEdge=data.edge;
+   status.textContent=(fixed===null?T.auto:T.fixed)+' · ±'+num(data.edge)+' µm'+(data.clipped?' · '+T.limited:'');
+   if(data.clipped&&fixed!==null){range.setAttribute('aria-invalid','true');range.closest('label').classList.add('lab-invalid')}
+   data.images.forEach((im,i)=>{if(im)paintPsf(holders[i],im,holders[i].previousElementSibling.dataset.alt,true)});
+  }
   try{
-   worker=new Worker(new URL('./diffraction.js?v=4',import.meta.url),{type:'module'});
-   let active;
-   function next(){
-    if(seq!==job)return;
-    if(!queue.length){worker.terminate();worker=null;return}
-    active=queue.shift();
-    worker.postMessage({spec:active.spec,crop:active.crop});
-   }
-   worker.onmessage=e=>{
-    if(seq!==job)return;
-    for(const inner of active.inners){
-      if(!e.data){inner.textContent=T.failed;continue}
-      paintPsf(inner,e.data,inner.previousElementSibling.dataset.alt,active.crop);
-    }
-    next();
-   };
-   worker.onerror=()=>{
-    if(seq!==job)return;
-    for(const item of [active,...queue])if(item)for(const inner of item.inners)inner.textContent=T.failed;
-    worker.terminate();worker=null;
-   };
-   next();
-  }catch{for(const item of queue)for(const inner of item.inners)inner.textContent=T.failed}
+   worker=new Worker(new URL('./diffraction.js?v=9',import.meta.url),{type:'module'});
+   worker.onmessage=e=>done(e.data);worker.onerror=()=>done(null);
+   worker.postMessage({specs,manual:fixed});
+  }catch{done(null)}
  }
  $('#reset').addEventListener('click',reset);
  form.addEventListener('change',update);form.addEventListener('submit',e=>{e.preventDefault();document.activeElement?.blur()});
