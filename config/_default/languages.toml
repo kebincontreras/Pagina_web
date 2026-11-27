@@ -35,7 +35,7 @@
 
   [[es.menu.main]]
     name = "Laboratorio virtual de óptica"
-    url = "https://kebincontreras.com/optics-lab/es/"
+    url = "/virtual-optics-lab/"
     weight = 45
 
 [fr]
@@ -66,7 +66,7 @@
 
   [[fr.menu.main]]
     name = "Laboratoire virtuel d’optique"
-    url = "https://kebincontreras.com/optics-lab/fr/"
+    url = "/virtual-optics-lab/"
     weight = 45
 
 # Uncomment the lines below to configure your website in a second language.

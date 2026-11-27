@@ -4,33 +4,41 @@ en:{lab:'Virtual Optics Lab',collection:'Simulation catalog',intro:'Explore how 
 es:{lab:'Laboratorio virtual de óptica',collection:'Catálogo de simuladores',intro:'Explora cómo los sistemas ópticos forman imágenes con experimentos interactivos.',basic:'Simulador básico',seidel:'Aberraciones de Seidel',desc:'Traza rayos a través de una lente de dos superficies, compara los cinco coeficientes de Seidel y observa la imagen de un punto de luz.',open:'Abrir simulador',back:'← Todos los simuladores',focus:'Pantalla al plano paraxial',reset:'Restaurar',raytitle:'Trazado de rayos · plano meridional',bartitle:'Coeficientes de Seidel · total (µm)',note:'La PSF usa una pupila circular uniforme y difracción escalar con aberraciones primarias de Seidel. Al cambiar la longitud de onda, los índices de refracción no se ajustan automáticamente.',f1:'Forma cara 1',f2:'Forma cara 2',R1:'|R₁| (mm)',R2:'|R₂| (mm)',t:'Espesor (mm)',edge:'Radio físico (mm)',a:'Radio de apertura (mm)',n1:'Índice antes de la lente',ng:'Índice de la lente',n3:'Índice después de la lente',field:'Campo (rad)',far:'Objeto lejano',s:'Distancia al objeto (mm)',screen:'Pantalla desde cara 2 (mm)',zone:'Mostrar rayos de',rays:'Número de rayos',nm:'Longitud de onda (nm)',crop:'Comparar en ±40 µm',detail:'Ver aportes de cada cara',pos:'Radio positivo',plane:'Plana',neg:'Radio negativo',all:'Toda la apertura',center:'Centro',edgezone:'Borde',height:'Altura (mm)',distance:'Distancia desde cara 1 (mm)',screenLegend:'Pantalla',names:['Esférica','Coma','Astigmatismo','Petzval','Distorsión'],surf1:'Cara 1',surf2:'Cara 2',total:'Total',para:'Plano paraxial',screenPsf:'Plano de la pantalla',both:'Pantalla en el plano paraxial',loading:'Calculando…',limits:'Este plano queda fuera de la aproximación paraxial de la pupila de salida.',sample:'La fase necesita más muestreo. Reduce la apertura o acerca la pantalla al plano paraxial.',failed:'No se pudo calcular la PSF para estos valores.',energy:'Energía dentro del cuadrado de ±40 µm',invalid:'Introduce valores numéricos válidos dentro de los rangos indicados.',shape:'La apertura debe caber en la lente y las dos caras no deben cruzarse.',noFocus:'No hay una imagen paraxial real dentro del recorrido de la pantalla.'},
 fr:{lab:'Laboratoire virtuel d’optique',collection:'Catalogue de simulateurs',intro:'Explorez la formation des images par les systèmes optiques à travers des expériences interactives.',basic:'Simulateur de base',seidel:'Aberrations de Seidel',desc:'Tracez des rayons à travers une lentille à deux surfaces, comparez les cinq coefficients de Seidel et observez l’image d’un point lumineux.',open:'Ouvrir le simulateur',back:'← Tous les simulateurs',focus:'Placer l’écran au plan paraxial',reset:'Réinitialiser',raytitle:'Tracé des rayons · plan méridien',bartitle:'Coefficients de Seidel · total (µm)',note:'La PSF repose sur une pupille circulaire uniforme et la diffraction scalaire avec les aberrations primaires de Seidel. Les indices de réfraction ne sont pas ajustés automatiquement avec la longueur d’onde.',f1:'Forme de la face 1',f2:'Forme de la face 2',R1:'|R₁| (mm)',R2:'|R₂| (mm)',t:'Épaisseur (mm)',edge:'Rayon de la lentille (mm)',a:'Rayon d’ouverture (mm)',n1:'Indice avant la lentille',ng:'Indice de la lentille',n3:'Indice après la lentille',field:'Angle de champ (rad)',far:'Objet à l’infini',s:'Distance de l’objet (mm)',screen:'Écran depuis la face 2 (mm)',zone:'Afficher les rayons',rays:'Nombre de rayons',nm:'Longueur d’onde (nm)',crop:'Comparer à ±40 µm',detail:'Voir la contribution des faces',pos:'Rayon positif',plane:'Plane',neg:'Rayon négatif',all:'Toute l’ouverture',center:'Centraux',edgezone:'Marginaux',height:'Hauteur (mm)',distance:'Distance depuis la face 1 (mm)',screenLegend:'Écran',names:['Sphérique','Coma','Astigmatisme','Petzval','Distorsion'],surf1:'Face 1',surf2:'Face 2',total:'Total',para:'Plan paraxial',screenPsf:'Plan de l’écran',both:'Écran dans le plan paraxial',loading:'Calcul en cours…',limits:'Ce plan dépasse le domaine de l’approximation paraxiale de la pupille de sortie.',sample:'La phase nécessite plus d’échantillons. Réduisez l’ouverture ou rapprochez l’écran du plan paraxial.',failed:'Impossible de calculer la PSF avec ces paramètres.',energy:'Énergie dans le carré de ±40 µm',invalid:'Saisissez des valeurs numériques valides dans les plages indiquées.',shape:'L’ouverture doit être comprise dans la lentille et les faces ne doivent pas se croiser.',noFocus:'Il n’y a pas d’image paraxiale réelle dans la plage de l’écran.'}
 };
-const $=x=>document.querySelector(x), param=new URLSearchParams(location.search);
-const pathLang=location.pathname.split('/').filter(Boolean).at(-1);
-const lang=Object.hasOwn(D,param.get('lang'))?param.get('lang'):Object.hasOwn(D,pathLang)?pathLang:'en',T=D[lang];
+const root=document.querySelector('.optics-lab'),$=x=>root.querySelector(x),param=new URLSearchParams(location.search);
+const lang=Object.hasOwn(D,root.dataset.lang)?root.dataset.lang:'en',T=D[lang];
 const entries=[{id:'seidel-basic',title:'seidel',description:'desc',level:'basic'}];
 const selected=entries.find(x=>x.id===param.get('sim'));
-const href=id=>'?lang='+lang+(id?'&sim='+id:'');
-document.documentElement.lang=lang;
-document.querySelectorAll('[data-t]').forEach(el=>el.textContent=T[el.dataset.t]);
-document.querySelectorAll('nav a').forEach(a=>{const l=a.lang;a.href='?lang='+l+(selected?'&sim='+selected.id:'');if(l===lang)a.setAttribute('aria-current','true')});
-$('#home').href=lang==='en'?'/':'/'+lang+'/';
-$('.back').href=href();
+const href=id=>id?'?sim='+id:location.pathname;
+const sections={
+ en:{parameters:'Parameters',core:'Experiment',lens:'Lens and media',source:'Object and field',display:'Display options',isolate:'PSF comparison',allTerms:'System PSF',isolated:'Isolated',totalPsf:'Total at the paraxial plane'},
+ es:{parameters:'Parámetros',core:'Experimento',lens:'Lente y medios',source:'Objeto y campo',display:'Opciones de visualización',isolate:'Comparación de PSF',allTerms:'PSF del sistema',isolated:'Aislada',totalPsf:'Total en el plano paraxial'},
+ fr:{parameters:'Paramètres',core:'Expérience',lens:'Lentille et milieux',source:'Objet et champ',display:'Options d’affichage',isolate:'Comparaison des PSF',allTerms:'PSF du système',isolated:'Isolée',totalPsf:'Totale au plan paraxial'}
+};
+Object.assign(T,sections[lang]);
+root.querySelectorAll('[data-t]').forEach(el=>el.textContent=T[el.dataset.t]);
+$('.lab-back').href=href();
 document.title=(selected?T.seidel+' | ':'')+T.lab+' | Kebin Contreras';
-for(const e of entries){const a=document.createElement('article');a.className='card';a.innerHTML='<p class="eyebrow">'+T[e.level]+'</p><h2>'+T[e.title]+'</h2><p>'+T[e.description]+'</p><a href="'+href(e.id)+'">'+T.open+' →</a>';$('#cards').append(a)}
+for(const e of entries){const a=document.createElement('article');a.className='lab-card';a.innerHTML='<p class="lab-kicker">'+T[e.level]+'</p><h2>'+T[e.title]+'</h2><p>'+T[e.description]+'</p><a href="'+href(e.id)+'">'+T.open+' →</a>';$('#cards').append(a)}
 function start(){
  const bounds={R1:[1,500,.01],R2:[1,500,.01],t:[.1,40,.01],edge:[.1,25,.1],a:[.1,25,.1],n1:[1,2.5,.00001],ng:[1,2.5,.00001],n3:[1,2.5,.00001],s:[1,10000,1],field:[-.2,.2,.001],screen:[.1,1000,.001],rays:[3,41,1],nm:[400,700,1]};
  const opts={f1:[[1,'pos'],[0,'plane'],[-1,'neg']],f2:[[1,'pos'],[0,'plane'],[-1,'neg']],zone:[['all','all'],['center','center'],['edge','edgezone']]};
- const order=['f1','R1','f2','R2','t','edge','n1','ng','n3','a','far','s','field','screen','zone','rays','nm','crop','detail'];
+ const groups={core:['a','screen','nm'],lens:['f1','R1','f2','R2','t','edge','n1','ng','n3'],source:['far','s','field'],display:['zone','rays','crop','detail']};
+ const order=Object.values(groups).flat();
  const form=$('#controls'), fields={};let worker=null,job=0;
- for(const id of order){
+ const mode=$('#psf-mode');for(const [i,name] of [T.allTerms,...T.names].entries()){const o=document.createElement('option');o.value=i-1;o.textContent=name;mode.append(o)}
+ mode.addEventListener('change',update);
+ for (const [key,ids] of Object.entries(groups)){
+  const block=document.createElement(key==='core'?'section':'details'),heading=document.createElement(key==='core'?'h2':'summary'),grid=document.createElement('div');
+  block.className='lab-group';heading.textContent=T[key];grid.className='lab-fields';block.append(heading,grid);form.append(block);
+  for(const id of ids){
   const label=document.createElement('label');const control=document.createElement(opts[id]?'select':'input');control.id=id;
   if(opts[id])for(const [v,k] of opts[id]){const o=document.createElement('option');o.value=v;o.textContent=T[k];control.append(o)}
   else if(typeof defaults[id]==='boolean'){control.type='checkbox';label.className='check';label.append(control)}
   else{control.type='number';control.min=bounds[id][0];control.max=bounds[id][1];control.step=id==='rays'||id==='nm'?'1':'any';control.inputMode=id==='rays'||id==='nm'?'numeric':'decimal'}
   label.append(T[id]);if(control.type!=='checkbox')label.append(control);
-  form.append(label);fields[id]=control;
- }
- function reset(){for(const id of order){const f=fields[id];if(f.type==='checkbox')f.checked=defaults[id];else f.value=id==='screen'?defaults[id].toFixed(5):defaults[id]}update()}
+  grid.append(label);fields[id]=control;
+ }}
+ function reset(){mode.value='-1';for(const id of order){const f=fields[id];if(f.type==='checkbox')f.checked=defaults[id];else f.value=id==='screen'?defaults[id].toFixed(5):defaults[id]}update()}
  function read(){
   const p={};
   for(const id of order){const f=fields[id];p[id]=f.type==='checkbox'?f.checked:id==='zone'?f.value:f.value===''?NaN:Number(f.value)}
@@ -48,12 +56,20 @@ function start(){
   drawRay(p,g);drawBars(g);
   if(p.detail)$('#detail').innerHTML='<table><thead><tr><th>µm</th><th>'+T.surf1+'</th><th>'+T.surf2+'</th><th>'+T.total+'</th></tr></thead><tbody>'+T.names.map((name,i)=>'<tr><th>'+name+'</th>'+[g.faces[0][i],g.faces[1][i],g.total[i]].map(v=>'<td>'+num(v)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
   const atFocus=Math.abs(g.q-p.screen)<.001;
-  const planes=atFocus?[[T.both,g.q]]:[[T.para,g.q],[T.screenPsf,p.screen]];
+  const isolated=Number(mode.value);
+  const isoGeometry={...g,total:g.total.map((x,i)=>i===isolated?x:0)};
+  const planes=isolated>=0?[[T.totalPsf,g.q,g],[T.isolated+': '+T.names[isolated],g.q,isoGeometry]]:
+    atFocus?[[T.both,g.q,g]]:[[T.para,g.q,g],[T.screenPsf,p.screen,g]];
   const queue=[];
-  for(const [title,z] of planes){
+  for(const [title,z,gg] of planes){
     const box=document.createElement('figure'),caption=document.createElement('figcaption'),inner=document.createElement('div');caption.textContent='PSF · '+title+' · '+p.nm+' nm';box.append(caption,inner);host.append(box);
-    const spec=psfSpec(p,g,z);
+    const spec=psfSpec(p,gg,z);
     if(!spec)inner.textContent=T.limits;else if(spec.m>4096)inner.textContent=T.sample;else{inner.textContent=T.loading;queue.push([spec,inner])}
+  }
+  if(isolated>=0&&!p.crop&&queue.length===2){
+    const specs=queue.map(([sp])=>sp);
+    const common=Math.min(Math.max(...specs.map(sp=>sp.view)),...specs.map(sp=>sp.n*sp.dx/2));
+    specs.forEach(sp=>sp.view=common);
   }
   function next(){if(seq!==job||!queue.length)return;const [spec,inner]=queue.shift();
    try{worker=new Worker(new URL('./diffraction.js',import.meta.url),{type:'module'});
@@ -66,7 +82,7 @@ function start(){
  $('#focus').addEventListener('click',()=>{try{const {g}=read();if(!Number.isFinite(g.q)||g.q<.1||g.q>1000)throw Error(T.noFocus);fields.screen.value=g.q.toFixed(5);update()}catch(e){error(e.message)}});
  $('#reset').addEventListener('click',reset);
  form.addEventListener('change',update);form.addEventListener('submit',e=>{e.preventDefault();document.activeElement?.blur()});
- form.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.type==='number'){e.preventDefault();e.target.blur()}});
+ form.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.type==='number'){e.preventDefault();update()}});
  reset();
 }
 const num=v=>new Intl.NumberFormat(lang,{maximumSignificantDigits:4}).format(v);
@@ -117,7 +133,7 @@ function paintPsf(inner,b,p){
  for(let i=0;i<b.pixels.length;i++){const q=b.pixels[i]/255;for(let j=0;j<3;j++)out.data[4*i+j]=Math.round(q*rgb[j]);out.data[4*i+3]=255}
  ctx.putImageData(out,0,0);
  if(!p.crop){const m=b.size/2;ctx.strokeStyle='#ffffff95';ctx.beginPath();ctx.moveTo(m-5,m);ctx.lineTo(m+5,m);ctx.moveTo(m,m-5);ctx.lineTo(m,m+5);ctx.stroke()}
- const axis=document.createElement('div');axis.className='psf-axis';axis.innerHTML='<span>−'+num(b.edge)+' µm</span><span>0</span><span>+'+num(b.edge)+' µm</span>';
+ const axis=document.createElement('div');axis.className='lab-psf-axis';axis.innerHTML='<span>−'+num(b.edge)+' µm</span><span>0</span><span>+'+num(b.edge)+' µm</span>';
  inner.replaceChildren(c,axis);
  if(p.crop&&b.energy!==null){const line=document.createElement('p');line.textContent=T.energy+': '+num(100*b.energy)+' %';inner.append(line)}
 }
