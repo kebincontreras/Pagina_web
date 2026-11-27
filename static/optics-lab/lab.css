@@ -41,3 +41,14 @@
  .optics-lab .lab-psfs{grid-template-columns:repeat(2,minmax(0,1fr))}
  .optics-lab .lab-total{grid-column:1/-1}
 }
+
+/* Dock the outputs beside the controls so the tall sidebar does not push the PSFs down. */
+.optics-lab.lab-active .lab-workspace{grid-template-columns:minmax(205px,245px) minmax(0,1fr)}
+.optics-lab .lab-view{min-width:0}
+.optics-lab .lab-charts{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(225px,1fr);gap:.55rem;align-items:start}
+.optics-lab .lab-psfs{grid-template-columns:minmax(180px,1.95fr) repeat(5,minmax(0,1fr))}
+.optics-lab .lab-rays svg,.optics-lab .lab-coeffs svg{max-height:clamp(170px,27vh,272px)}
+.optics-lab .lab-psfs .lab-psf-axis span{white-space:normal}
+@media(max-width:1150px){.optics-lab .lab-psfs{grid-template-columns:repeat(3,minmax(0,1fr))}.optics-lab .lab-total{grid-column:span 1}}
+@media(max-width:840px){.optics-lab.lab-active .lab-workspace{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:560px){.optics-lab .lab-charts{grid-template-columns:minmax(0,1fr)}.optics-lab .lab-psfs{grid-template-columns:repeat(2,minmax(0,1fr))}.optics-lab .lab-total{grid-column:1/-1}}
