@@ -10,9 +10,9 @@ const entries=[{id:'seidel-basic',title:'seidel',description:'desc',level:'basic
 const selected=entries.find(x=>x.id===param.get('sim'));
 const href=id=>id?'?sim='+id:location.pathname;
 const sections={
- en:{parameters:'Parameters',core:'Experiment',lens:'Lens and media',source:'Object',display:'Display options',gallery:'Point spread functions',galleryNote:'Paraxial plane · isolated terms use the same ±40 µm window · brightness relative to each PSF peak',wide:'Total · wide view',screenExtra:'PSF at the current screen position',unitCrop:'±40 µm energy'},
- es:{parameters:'Parámetros',core:'Experimento',lens:'Lente y medios',source:'Objeto',display:'Opciones de visualización',gallery:'Funciones de dispersión puntual',galleryNote:'Plano paraxial · términos aislados en la misma ventana de ±40 µm · brillo relativo al máximo de cada PSF',wide:'Total · vista amplia',screenExtra:'PSF en la posición actual de la pantalla',unitCrop:'Energía en ±40 µm'},
- fr:{parameters:'Paramètres',core:'Expérience',lens:'Lentille et milieux',source:'Objet',display:'Options d’affichage',gallery:'Fonctions d’étalement du point',galleryNote:'Plan paraxial · termes isolés dans la même fenêtre de ±40 µm · luminosité relative au maximum de chaque PSF',wide:'Totale · vue large',screenExtra:'PSF à la position actuelle de l’écran',unitCrop:'Énergie à ±40 µm'}
+ en:{parameters:'Parameters',core:'Experiment',lens:'Lens and media',source:'Object',display:'Display options',gallery:'Point spread functions',galleryNote:'Paraxial plane · isolated terms use the same ±40 µm window · brightness relative to each PSF peak',wide:'Total · wide view',paraxialScreen:'Paraxial image plane',noRealImage:'No real paraxial image plane beyond the lens. Rays are shown without a screen.',unitCrop:'±40 µm energy'},
+ es:{parameters:'Parámetros',core:'Experimento',lens:'Lente y medios',source:'Objeto',display:'Opciones de visualización',gallery:'Funciones de dispersión puntual',galleryNote:'Plano paraxial · términos aislados en la misma ventana de ±40 µm · brillo relativo al máximo de cada PSF',wide:'Total · vista amplia',paraxialScreen:'Plano imagen paraxial',noRealImage:'No hay un plano imagen paraxial real después de la lente. Se muestran los rayos sin pantalla.',unitCrop:'Energía en ±40 µm'},
+ fr:{parameters:'Paramètres',core:'Expérience',lens:'Lentille et milieux',source:'Objet',display:'Options d’affichage',gallery:'Fonctions d’étalement du point',galleryNote:'Plan paraxial · termes isolés dans la même fenêtre de ±40 µm · luminosité relative au maximum de chaque PSF',wide:'Totale · vue large',paraxialScreen:'Plan image paraxial',noRealImage:'Aucun plan image paraxial réel après la lentille. Les rayons sont affichés sans écran.',unitCrop:'Énergie à ±40 µm'}
 };
 Object.assign(T,sections[lang]);
 root.querySelectorAll('[data-t]').forEach(el=>el.textContent=T[el.dataset.t]);
@@ -20,9 +20,9 @@ $('.lab-back').href=href();
 document.title=(selected?T.seidel+' | ':'')+T.lab+' | Kebin Contreras';
 for(const e of entries){const a=document.createElement('article');a.className='lab-card';a.innerHTML='<p class="lab-kicker">'+T[e.level]+'</p><h2>'+T[e.title]+'</h2><p>'+T[e.description]+'</p><a href="'+href(e.id)+'">'+T.open+' →</a>';$('#cards').append(a)}
 function start(){
- const bounds={R1:[1,500,.01],R2:[1,500,.01],t:[.1,40,.01],edge:[.1,25,.1],a:[.1,25,.1],n1:[1,2.5,.00001],ng:[1,2.5,.00001],n3:[1,2.5,.00001],s:[1,10000,1],field:[-.2,.2,.001],screen:[.1,1000,.001],rays:[3,41,1],nm:[400,700,1]};
+ const bounds={R1:[1,500,.01],R2:[1,500,.01],t:[.1,40,.01],edge:[.1,25,.1],a:[.1,25,.1],n1:[1,2.5,.00001],ng:[1,2.5,.00001],n3:[1,2.5,.00001],s:[1,10000,1],field:[-.2,.2,.001],rays:[3,41,1],nm:[400,700,1]};
  const opts={f1:[[1,'pos'],[0,'plane'],[-1,'neg']],f2:[[1,'pos'],[0,'plane'],[-1,'neg']],zone:[['all','all'],['center','center'],['edge','edgezone']]};
- const groups={core:['a','screen','nm','field'],lens:['f1','R1','f2','R2','t','edge','n1','ng','n3'],source:['far','s'],display:['zone','rays','detail']};
+ const groups={core:['a','nm','field'],lens:['f1','R1','f2','R2','t','edge','n1','ng','n3'],source:['far','s'],display:['zone','rays','detail']};
  const order=Object.values(groups).flat();
  const form=$('#controls'), fields={};let worker=null,job=0;
  for (const [key,ids] of Object.entries(groups)){
@@ -36,7 +36,7 @@ function start(){
   label.append(T[id]);if(control.type!=='checkbox')label.append(control);
   grid.append(label);fields[id]=control;
  }}
- function reset(){for(const id of order){const f=fields[id];if(f.type==='checkbox')f.checked=defaults[id];else f.value=id==='screen'?defaults[id].toFixed(5):defaults[id]}update()}
+ function reset(){for(const id of order){const f=fields[id];if(f.type==='checkbox')f.checked=defaults[id];else f.value=defaults[id]}update()}
  function invalid(id,on=true){
   const f=fields[id];
   f.closest('label').classList.toggle('lab-invalid',on);
@@ -77,10 +77,12 @@ function start(){
  function error(msg){const e=$('#error');e.hidden=!msg;e.textContent=msg}
  function update(){
   job++;if(worker){worker.terminate();worker=null}const seq=job;
-  const host=$('#psfs'),screenHost=$('#screen-psf'),screenResult=$('#screen-result');
-  host.replaceChildren();screenHost.replaceChildren();screenResult.hidden=true;$('#detail').replaceChildren();
+  const host=$('#psfs');
+  host.replaceChildren();$('#detail').replaceChildren();
   let p,g;try{({p,g}=read());error('')}catch(e){error(e.message);$('#rayplot').replaceChildren();$('#bars').replaceChildren();return}
-  drawRay(p,g);drawBars(g);
+  const physicalScreen=Number.isFinite(g.q)&&g.q>Math.max(0,sag(g.r2,p.edge));
+  p.screen=physicalScreen?g.q:Math.max(0,sag(g.r2,p.edge))+Math.max(12,2*p.edge);
+  drawRay(p,g,physicalScreen);drawBars(g);
   if(p.detail)$('#detail').innerHTML='<table><thead><tr><th>µm</th><th>'+T.surf1+'</th><th>'+T.surf2+'</th><th>'+T.total+'</th></tr></thead><tbody>'+T.names.map((name,i)=>'<tr><th>'+name+'</th>'+[g.faces[0][i],g.faces[1][i],g.total[i]].map(v=>'<td>'+num(v)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
   const queue=[],same=new Map();
   function panel(host,title,z,gg,{crop=false,total=false}={}){
@@ -102,10 +104,9 @@ function start(){
     if(same.has(key))same.get(key).inners.push(inner);
     else{const item={spec,crop,inners:[inner]};same.set(key,item);queue.push(item)}
   }
+  if(!physicalScreen){host.textContent=T.noRealImage;return}
   panel(host,T.wide,g.q,g,{total:true});
   T.names.forEach((name,i)=>panel(host,name,g.q,{...g,total:g.total.map((x,k)=>i===k?x:0)},{crop:true}));
-  const away=Number.isFinite(g.q)&&Math.abs(g.q-p.screen)>=.001;
-  if(away){screenResult.hidden=false;if(screenResult.open)panel(screenHost,T.screenPsf,p.screen,g)}
   if(!queue.length)return;
   try{
    worker=new Worker(new URL('./diffraction.js?v=4',import.meta.url),{type:'module'});
@@ -132,8 +133,6 @@ function start(){
    next();
   }catch{for(const item of queue)for(const inner of item.inners)inner.textContent=T.failed}
  }
- $('#screen-result').addEventListener('toggle',()=>{if($('#screen-result').open&&!$('#screen-result').hidden)update()});
- $('#focus').addEventListener('click',()=>{try{const {g}=read();if(!Number.isFinite(g.q)||g.q<.1||g.q>1000)throw Error(T.noFocus);fields.screen.value=g.q.toFixed(5);update()}catch(e){error(e.message)}});
  $('#reset').addEventListener('click',reset);
  form.addEventListener('change',update);form.addEventListener('submit',e=>{e.preventDefault();document.activeElement?.blur()});
  form.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.type==='number'){e.preventDefault();update()}});
@@ -141,7 +140,7 @@ function start(){
 }
 const num=v=>new Intl.NumberFormat(lang,{maximumSignificantDigits:4}).format(v);
 function node(name,attrs,txt){const e=document.createElementNS('http://www.w3.org/2000/svg',name);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);if(txt!==undefined)e.textContent=txt;return e}
-function drawRay(p,g){
+function drawRay(p,g,physicalScreen){
  const svg=$('#rayplot');svg.replaceChildren();svg.setAttribute('aria-label',T.raytitle);const add=(...args)=>svg.append(node(...args));
  const left=Math.max(-g.s,Math.min(-10,sag(g.r1,p.edge)-2,-Math.min(.25*(p.t+p.screen),60)));
  const end=p.t+p.screen,right=Math.max(end+Math.max(2,.07*end),p.t+sag(g.r2,p.edge)+2);
@@ -157,17 +156,17 @@ function drawRay(p,g){
  for(let i=-2;i<=2;i++){const q=i*yMax/2;l(56,Y(q),61,Y(q),'#92a5a2');add('text',{x:50,y:Y(q)+4,'text-anchor':'end'},num(q))}
  const hs=Array.from({length:101},(_,i)=>-p.edge+2*p.edge*i/100),pts=(a)=>a.map(([z,h])=>X(z)+','+Y(h)).join(' ');
  add('polygon',{points:pts(hs.map(h=>[sag(g.r1,h),h]).concat([...hs].reverse().map(h=>[p.t+sag(g.r2,h),h]))),fill:'#d4eaf2',stroke:'#385c6e','stroke-width':1.6});
- l(X(end),27,X(end),279,'#a75e37','5 4');
+ if(physicalScreen)l(X(end),27,X(end),279,'#a75e37','5 4');
  for(const ray of rs){
   add('polyline',{points:pts(ray.slice(0,2)),fill:'none',stroke:'#7996ac','stroke-opacity':.8});
   if(ray.length>2)add('polyline',{points:pts(ray.slice(1)),fill:'none',stroke:'#007e70','stroke-width':1.35});
   const [z,h]=ray.at(-1);
-  add('circle',{cx:X(z),cy:Y(h),r:ray.length===4?2:2.5,fill:ray.length===4?'#a75e37':'#a12d4e'});
+  if(physicalScreen||ray.length<4)add('circle',{cx:X(z),cy:Y(h),r:ray.length===4?2:2.5,fill:ray.length===4?'#a75e37':'#a12d4e'});
  }
- if(g.q>0&&g.q+p.t<right&&Math.abs(g.yi)<yMax)add('circle',{cx:X(g.q+p.t),cy:Y(g.yi),r:4,fill:'#792e62'});
+ if(physicalScreen&&g.q+p.t<right&&Math.abs(g.yi)<yMax)add('circle',{cx:X(g.q+p.t),cy:Y(g.yi),r:4,fill:'#792e62'});
  add('text',{x:325,y:329,'text-anchor':'middle'},T.distance);
  add('text',{transform:'translate(15 153) rotate(-90)','text-anchor':'middle'},T.height);
- add('text',{x:X(end)-4,y:19,'text-anchor':'end'},T.screenLegend);
+ if(physicalScreen)add('text',{x:X(end)-4,y:19,'text-anchor':'end'},T.paraxialScreen);
 }
 function drawBars(g){
  const svg=$('#bars');svg.replaceChildren();svg.setAttribute('aria-label',T.bartitle);const add=(...args)=>svg.append(node(...args));
